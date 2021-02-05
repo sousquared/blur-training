@@ -1,2 +1,2 @@
 # blur-training
-Training CNNs(Convolutional Newral Networks) with blurred images.
+Training CNNs(Convolutional Neural Networks) with blurred images.
