@@ -9,7 +9,7 @@ Training images are blurred by Gaussian function. The images are more blurred as
 
 ## Schedule
 You can try different training schedule as for blurring images. Here is an overview of the training schedule: <br>
-(The descriptions are different and some modes may not be included in `./cifar10/`)
+(In `./cifar10/`, the terms are different and some modes may not be included.)
 ![schedule](./figures/schedule.png)
 
 
