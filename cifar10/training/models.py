@@ -1,5 +1,5 @@
 import torch.nn as nn
-import torch.nn.functional as F
+
 
 # from torchvision source code
 # https://github.com/pytorch/vision/blob/master/torchvision/models/alexnet.py

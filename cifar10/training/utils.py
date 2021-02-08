@@ -1,9 +1,8 @@
+import cv2
+import numpy as np
 import torch
 import torchvision
 import torchvision.transforms as transforms
-
-import numpy as np
-import cv2
 
 
 def dataloader(batch_size):
