@@ -19,7 +19,7 @@ Each repository contains the scripts for each dataset below:
 - [`./imagenet16/`][imagenet16]: 16-class-ImageNet dataset <br>
   This dataset is from Geirhos et al., 2018. <br>
   (R. Geirhos, C. R. M. Temme, J. Rauber, H. H. Schütt, M. Bethge and F. A. Wichmann: Generalisation in humans and deep neural networks. Advances in Neural Information Processing Systems (NeurIPS), 7538–7550, 2018.) <br>
-  I made the dataset from ImageNet by using `robustness` library.
+  I make the dataset from ImageNet by using `robustness` library.
 - [`./cifar10/`][cifar10]: Cifar-10 dataset  
 
 
