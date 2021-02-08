@@ -1,6 +1,5 @@
 import sys
 
-sys.path.append("../")
 import os
 import time
 import argparse
@@ -13,19 +12,12 @@ from torch.utils.tensorboard import SummaryWriter
 import torch.backends.cudnn as cudnn
 import torchvision.models as models
 
-from utils import (
-    load_data,
-    load_model,
-    save_model,
-    GaussianBlurAll,
-    RandomGaussianBlurAll,
-    adjust_multi_steps,
-    adjust_multi_steps_cbt,
-    adjust_learning_rate,
-    AverageMeter,
-    accuracy,
-    print_settings,
-)
+from .blur.blur_images import GaussianBlurAll, RandomGaussianBlurAll
+from .dataset.data import load_data
+from .utils.model import load_model, save_model
+from .utils.adjust import adjust_learning_rate, adjust_multi_steps, adjust_multi_steps_cbt
+from .utils.accuracy import AverageMeter, accuracy
+from .utils.print import print_settings
 
 
 model_names = sorted(
