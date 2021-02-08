@@ -4,7 +4,6 @@ import torch.nn.functional as F
 # from torchvision source code
 # https://github.com/pytorch/vision/blob/master/torchvision/models/alexnet.py
 class AlexNet(nn.Module):
-
     def __init__(self, num_classes=1000):
         super(AlexNet, self).__init__()
         self.features = nn.Sequential(
@@ -40,9 +39,9 @@ class AlexNet(nn.Module):
         x = self.classifier(x)
         return x
 
+
 # source: http://cedro3.com/ai/pytorch-alexnet/
 class AlexNetCifar10(nn.Module):
- 
     def __init__(self, num_classes=10):
         super(AlexNetCifar10, self).__init__()
         self.features = nn.Sequential(
@@ -69,7 +68,7 @@ class AlexNetCifar10(nn.Module):
             nn.ReLU(inplace=True),
             nn.Linear(4096, num_classes),
         )
- 
+
     def forward(self, x):
         x = self.features(x)
         x = x.view(x.size(0), 256 * 4 * 4)
