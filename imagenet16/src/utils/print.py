@@ -1,4 +1,3 @@
-
 def print_settings(model, args):
     print("=" * 5 + " settings " + "=" * 5)
     print("TRAINING MODE: {}".format(args.mode))
