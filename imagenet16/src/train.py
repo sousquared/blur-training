@@ -135,13 +135,15 @@ def main():
         sys.exit()
 
     # directories settings
-    os.makedirs("../logs/outputs", exist_ok=True)
-    os.makedirs("../logs/models/{}".format(args.exp_name), exist_ok=True)
+    # Make logs directories where the main() is called
+    log_dir = "./logs"
+    os.makedirs(os.path.join(log_dir, "outputs"), exist_ok=True)
+    os.makedirs(os.path.join(log_dir, "models/{}".format(args.exp_name)), exist_ok=True)
 
-    OUTPUT_PATH = "../logs/outputs/{}.log".format(args.exp_name)
-    MODEL_PATH = "../logs/models/{}/".format(args.exp_name)
+    output_path = os.path.join(log_dir, "outputs/{}.log".format(args.exp_name))
+    model_path = os.path.join(log_dir, "models/{}/".format(args.exp_name))
 
-    if not args.resume and os.path.exists(OUTPUT_PATH):
+    if not args.resume and os.path.exists(output_path):
         print(
             "ERROR: This '--exp-name' is already used. \
                 Use another name for this experiment."
@@ -149,11 +151,11 @@ def main():
         sys.exit()
 
     # recording outputs
-    sys.stdout = open(OUTPUT_PATH, "a")
-    sys.stderr = open(OUTPUT_PATH, "a")
+    sys.stdout = open(output_path, "a")
+    sys.stderr = open(output_path, "a")
 
     # tensorboardX
-    writer = SummaryWriter(log_dir="../logs/tb/{}".format(args.exp_name))
+    writer = SummaryWriter(log_dir=os.path.join(log_dir, "tb/{}".format(args.exp_name)))
 
     # cuda settings
     args.cuda = not args.no_cuda and torch.cuda.is_available()
@@ -302,7 +304,7 @@ def main():
                     "state_dict": model.state_dict(),
                     "optimizer": optimizer.state_dict(),
                 },
-                MODEL_PATH,
+                model_path,
                 epoch + 1,
             )
 
