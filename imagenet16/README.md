@@ -15,7 +15,7 @@ You can try different training schedule as for blurring images. Here is an overv
 ## CNNs Architecture
 **Default: AlexNet (16 class)**  
 Since the number of class is 16, I change the number of final units from 1000 to 16.
-See more in `notebook/models.ipynb`  
+See more details in `notebooks/models.ipynb`  
 You can also use another architecture by using `--arch [ARCHITECTURE NAME]`. See `python src/train.py -h` for the available models (from pytorchvision's model zoo).
 
 
@@ -98,7 +98,7 @@ $ python src/train.py --arch alexnet --mode mix -s 1 -n alexnet_mix_s1 --resume 
 ```
 
 
-## notebook
+## notebooks
 Demonstrations of 16-class-ImageNet, GaussianBlur, and CNN model architectures.
 
 
