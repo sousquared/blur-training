@@ -1,31 +1,31 @@
-import sys
-
-sys.path.append("../")
-import os
-import time
 import argparse
-import numpy as np
+import os
+import pathlib
+import sys
+import time
 
+import numpy as np
 import torch
+import torch.backends.cudnn as cudnn
 import torch.nn as nn
 import torch.optim as optim
-from torch.utils.tensorboard import SummaryWriter
-import torch.backends.cudnn as cudnn
 import torchvision.models as models
+from torch.utils.tensorboard import SummaryWriter
 
-from utils import (
-    load_data,
-    load_model,
-    save_model,
-    GaussianBlurAll,
-    RandomGaussianBlurAll,
+# add a path to load src module
+current_dir = pathlib.Path(os.path.abspath(__file__)).parent
+sys.path.append(str(current_dir) + "/../")
+
+from src.blur.blur_images import GaussianBlurAll, RandomGaussianBlurAll
+from src.dataset.data import load_data
+from src.utils.model import load_model, save_model
+from src.utils.adjust import (
+    adjust_learning_rate,
     adjust_multi_steps,
     adjust_multi_steps_cbt,
-    adjust_learning_rate,
-    AverageMeter,
-    accuracy,
-    print_settings,
 )
+from src.utils.accuracy import AverageMeter, accuracy
+from src.utils.print import print_settings
 
 
 model_names = sorted(
@@ -64,7 +64,13 @@ parser.add_argument(
     ],
     help="Training mode.",
 )
-parser.add_argument("--exp-name", "-n", type=str, default="", help="Experiment name.")
+parser.add_argument("--exp_name", "-n", type=str, default="", help="Experiment name.")
+parser.add_argument(
+    "--log_dir",
+    type=str,
+    default="./logs",
+    help="Path to log directory to store trained models, tensorboard, stdout, and stderr.",
+)
 parser.add_argument(
     "--sigma",
     "-s",
@@ -132,30 +138,35 @@ def main():
     args = parser.parse_args()
     if args.exp_name == "":
         print(
-            "ERROR: USE '--exp-name' or '-n' option to define this experiment's name."
+            "ERROR: USE '--exp_name' or '-n' option to define this experiment's name."
         )
         sys.exit()
 
     # directories settings
-    os.makedirs("../logs/outputs", exist_ok=True)
-    os.makedirs("../logs/models/{}".format(args.exp_name), exist_ok=True)
+    os.makedirs(os.path.join(args.log_dir, "outputs"), exist_ok=True)
+    os.makedirs(
+        os.path.join(args.log_dir, "models/{}".format(args.exp_name)), exist_ok=True
+    )
 
-    OUTPUT_PATH = "../logs/outputs/{}.log".format(args.exp_name)
-    MODEL_PATH = "../logs/models/{}/".format(args.exp_name)
+    output_path = os.path.join(args.log_dir, "outputs/{}.log".format(args.exp_name))
+    model_path = os.path.join(args.log_dir, "models/{}/".format(args.exp_name))
 
-    if not args.resume and os.path.exists(OUTPUT_PATH):
+    # check if "exp_name" is already in use or not (except --resume mode)
+    if not args.resume and os.path.exists(output_path):
         print(
-            "ERROR: This '--exp-name' is already used. \
+            "ERROR: This '--exp_name' is already used. \
                 Use another name for this experiment."
         )
         sys.exit()
 
     # recording outputs
-    sys.stdout = open(OUTPUT_PATH, "a")
-    sys.stderr = open(OUTPUT_PATH, "a")
+    sys.stdout = open(output_path, "a")
+    sys.stderr = open(output_path, "a")
 
     # tensorboardX
-    writer = SummaryWriter(log_dir="../logs/tb/{}".format(args.exp_name))
+    writer = SummaryWriter(
+        log_dir=os.path.join(args.log_dir, "tb/{}".format(args.exp_name))
+    )
 
     # cuda settings
     args.cuda = not args.no_cuda and torch.cuda.is_available()
@@ -294,6 +305,19 @@ def main():
         writer.add_scalar("acc/val", val_acc.avg, epoch + 1)  # average acc
 
         # ===== save the model =====
+        # checkpoint
+        save_model(
+            {
+                "epoch": epoch + 1,
+                "arch": args.arch,
+                "val_loss": val_loss.avg,
+                "val_acc": val_acc.avg,
+                "state_dict": model.state_dict(),
+                "optimizer": optimizer.state_dict(),
+            },
+            model_path,
+        )
+        # save every 10 epoch
         if (epoch + 1) % 10 == 0:
             save_model(
                 {
@@ -304,7 +328,7 @@ def main():
                     "state_dict": model.state_dict(),
                     "optimizer": optimizer.state_dict(),
                 },
-                MODEL_PATH,
+                model_path,
                 epoch + 1,
             )
 
