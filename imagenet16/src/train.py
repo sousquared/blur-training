@@ -62,7 +62,7 @@ parser.add_argument(
     ],
     help="Training mode.",
 )
-parser.add_argument("--exp-name", "-n", type=str, default="", help="Experiment name.")
+parser.add_argument("--exp_name", "-n", type=str, default="", help="Experiment name.")
 parser.add_argument(
     "--log_dir",
     type=str,
@@ -136,7 +136,7 @@ def main():
     args = parser.parse_args()
     if args.exp_name == "":
         print(
-            "ERROR: USE '--exp-name' or '-n' option to define this experiment's name."
+            "ERROR: USE '--exp_name' or '-n' option to define this experiment's name."
         )
         sys.exit()
 
@@ -152,7 +152,7 @@ def main():
     # check if "exp_name" is already in use or not (except --resume mode)
     if not args.resume and os.path.exists(output_path):
         print(
-            "ERROR: This '--exp-name' is already used. \
+            "ERROR: This '--exp_name' is already used. \
                 Use another name for this experiment."
         )
         sys.exit()
