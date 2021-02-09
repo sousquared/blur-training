@@ -1,3 +1,5 @@
+import os
+
 import torch
 import torch.nn as nn
 import torchvision.models as models
@@ -39,6 +41,9 @@ def load_model(arch, num_classes=16):
     return model
 
 
-def save_model(state, param_path, epoch):
-    filename = param_path + "epoch_{}.pth.tar".format(epoch)
+def save_model(state, param_path, epoch=None):
+    if not epoch:
+        filename = os.path.join(param_path, "checkpoint.pth.tar")
+    else:
+        filename = os.path.join(param_path, "epoch_{}.pth.tar".format(epoch))
     torch.save(state, filename)

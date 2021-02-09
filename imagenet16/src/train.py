@@ -305,6 +305,18 @@ def main():
         writer.add_scalar("acc/val", val_acc.avg, epoch + 1)  # average acc
 
         # ===== save the model =====
+        # checkpoint
+        save_model(
+            {
+                "epoch": epoch + 1,
+                "arch": args.arch,
+                "val_loss": val_loss.avg,
+                "val_acc": val_acc.avg,
+                "state_dict": model.state_dict(),
+                "optimizer": optimizer.state_dict(),
+            },
+            model_path,
+        )
         if (epoch + 1) % 10 == 0:
             save_model(
                 {
