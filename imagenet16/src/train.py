@@ -1,18 +1,20 @@
-import sys
-
-sys.path.append("../src")
-
-import os
-import time
 import argparse
-import numpy as np
+import os
+import pathlib
+import sys
+import time
 
+import numpy as np
 import torch
+import torch.backends.cudnn as cudnn
 import torch.nn as nn
 import torch.optim as optim
-from torch.utils.tensorboard import SummaryWriter
-import torch.backends.cudnn as cudnn
 import torchvision.models as models
+from torch.utils.tensorboard import SummaryWriter
+
+# add a path to load src module
+current_dir = pathlib.Path(os.path.abspath(__file__)).parent
+sys.path.append(str(current_dir) + "/../")
 
 from src.blur.blur_images import GaussianBlurAll, RandomGaussianBlurAll
 from src.dataset.data import load_data

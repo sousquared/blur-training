@@ -1,10 +1,18 @@
+import os
+import pathlib
+
 import torchvision.transforms as transforms
 from robustness import datasets
 from robustness.tools.imagenet_helpers import common_superclass_wnid, ImageNetHierarchy
 
 
+current_dir = pathlib.Path(os.path.abspath(__file__)).parent
+
+
 def load_data(
-    batch_size, in_path="/mnt/data/ImageNet/ILSVRC2012/", in_info_path="./info/"
+    batch_size,
+    in_path="/mnt/data/ImageNet/ILSVRC2012/",
+    in_info_path=str(current_dir) + "/info/",
 ):
     """
     load 16-class-ImageNet
