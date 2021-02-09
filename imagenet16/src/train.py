@@ -142,6 +142,7 @@ def main():
     output_path = os.path.join(log_dir, "outputs/{}.log".format(args.exp_name))
     model_path = os.path.join(log_dir, "models/{}/".format(args.exp_name))
 
+    # check if "exp_name" is already in use or not (except --resume mode)
     if not args.resume and os.path.exists(output_path):
         print(
             "ERROR: This '--exp-name' is already used. \
