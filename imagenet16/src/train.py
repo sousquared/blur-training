@@ -317,6 +317,7 @@ def main():
             },
             model_path,
         )
+        # save every 10 epoch
         if (epoch + 1) % 10 == 0:
             save_model(
                 {
