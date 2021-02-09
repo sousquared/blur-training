@@ -64,6 +64,12 @@ parser.add_argument(
 )
 parser.add_argument("--exp-name", "-n", type=str, default="", help="Experiment name.")
 parser.add_argument(
+    "--log_dir",
+    type=str,
+    default="./logs",
+    help="Path to log directory to store trained models, tensorboard, stdout, and stderr.",
+)
+parser.add_argument(
     "--sigma",
     "-s",
     type=float,
@@ -135,12 +141,13 @@ def main():
         sys.exit()
 
     # directories settings
-    log_dir = "../logs"
-    os.makedirs(os.path.join(log_dir, "outputs"), exist_ok=True)
-    os.makedirs(os.path.join(log_dir, "models/{}".format(args.exp_name)), exist_ok=True)
+    os.makedirs(os.path.join(args.log_dir, "outputs"), exist_ok=True)
+    os.makedirs(
+        os.path.join(args.log_dir, "models/{}".format(args.exp_name)), exist_ok=True
+    )
 
-    output_path = os.path.join(log_dir, "outputs/{}.log".format(args.exp_name))
-    model_path = os.path.join(log_dir, "models/{}/".format(args.exp_name))
+    output_path = os.path.join(args.log_dir, "outputs/{}.log".format(args.exp_name))
+    model_path = os.path.join(args.log_dir, "models/{}/".format(args.exp_name))
 
     # check if "exp_name" is already in use or not (except --resume mode)
     if not args.resume and os.path.exists(output_path):
@@ -155,7 +162,9 @@ def main():
     sys.stderr = open(output_path, "a")
 
     # tensorboardX
-    writer = SummaryWriter(log_dir=os.path.join(log_dir, "tb/{}".format(args.exp_name)))
+    writer = SummaryWriter(
+        log_dir=os.path.join(args.log_dir, "tb/{}".format(args.exp_name))
+    )
 
     # cuda settings
     args.cuda = not args.no_cuda and torch.cuda.is_available()
