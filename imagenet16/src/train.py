@@ -135,8 +135,7 @@ def main():
         sys.exit()
 
     # directories settings
-    # Make logs directories where the main() is called
-    log_dir = "./logs"
+    log_dir = "../logs"
     os.makedirs(os.path.join(log_dir, "outputs"), exist_ok=True)
     os.makedirs(os.path.join(log_dir, "models/{}".format(args.exp_name)), exist_ok=True)
 
