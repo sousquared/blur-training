@@ -6,3 +6,7 @@ __pycache__/
 .ipynb_checkpoints/
 
 *.sh
+
+# for analysis
+results/
+plots/
