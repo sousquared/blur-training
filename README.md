@@ -14,13 +14,14 @@ You can try different training schedule as for blurring images. Here is an overv
 
 
 # Datasets
-Each repository contains the scripts for each dataset below:
-- [`./imagenet/`][imagenet]: ImageNet dataset
-- [`./imagenet16/`][imagenet16]: 16-class-ImageNet dataset <br>
+Each repository contains the training scripts with each dataset below: <br>
+(Note that you have to download and/or put the path to the dataset.)
+- [`./imagenet/`][imagenet]: Training with ImageNet dataset
+- [`./imagenet16/`][imagenet16]: Training with 16-class-ImageNet dataset 
   This dataset is from Geirhos et al., 2018. <br>
   (R. Geirhos, C. R. M. Temme, J. Rauber, H. H. Schütt, M. Bethge and F. A. Wichmann: Generalisation in humans and deep neural networks. Advances in Neural Information Processing Systems (NeurIPS), 7538–7550, 2018.) <br>
   I make the dataset from ImageNet by using `robustness` library.
-- [`./cifar10/`][cifar10]: Cifar-10 dataset  
+- [`./cifar10/`][cifar10]: Training with Cifar-10 dataset  
 
 
 [imagenet]:./imagenet/
