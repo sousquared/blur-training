@@ -30,5 +30,5 @@ def load_model(model_path, arch="alexnet"):
     except RuntimeError:
         model.features = torch.nn.DataParallel(model.features)
         model.load_state_dict(checkpoint["state_dict"])
-        # model.features = model.features.module  # if you want to disable Dataparallel
+        # model.features = model.features.module  # if you want to disable DataParallel
     return model
