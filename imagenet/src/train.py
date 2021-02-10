@@ -1,5 +1,6 @@
 import argparse
 import os
+import pathlib
 import random
 import sys
 import time
@@ -18,19 +19,19 @@ import torchvision.transforms as transforms
 from torch.utils.tensorboard import SummaryWriter
 from torchvision import models
 
-from utils import (
-    save_model,
-    GaussianBlurAll,
-    RandomGaussianBlurAll,
+# add a path to load src module
+current_dir = pathlib.Path(os.path.abspath(__file__)).parent
+sys.path.append(str(current_dir) + "/../")
+
+from src.blur.blur_images import GaussianBlurAll, RandomGaussianBlurAll
+from src.utils.model import save_model, save_checkpoint
+from src.utils.adjust import (
+    adjust_learning_rate,
     adjust_multi_steps,
     adjust_multi_steps_cbt,
-    adjust_learning_rate,
-    AverageMeter,
-    accuracy,
-    save_checkpoint,
-    ProgressMeter,
-    print_settings,
 )
+from src.utils.accuracy import accuracy, AverageMeter, ProgressMeter
+from src.utils.print import print_settings
 
 ###################################################################
 # TODO: set path to ImageNet
@@ -159,6 +160,12 @@ parser.add_argument(
 ### Blur-Training additional arguments
 parser.add_argument("--exp_name", "-n", type=str, default="", help="Experiment name.")
 parser.add_argument(
+    "--log_dir",
+    type=str,
+    default="./logs",
+    help="Path to log directory to store trained models, tensorboard, stdout, and stderr.",
+)
+parser.add_argument(
     "--mode",
     type=str,
     choices=[
@@ -223,11 +230,8 @@ def main():
     args = parser.parse_args()
 
     # directories settings
-    os.makedirs("../logs/outputs", exist_ok=True)
-    os.makedirs("../logs/models/{}".format(args.exp_name), exist_ok=True)
-    os.makedirs("../logs/tb", exist_ok=True)
-
-    outputs_path = "../logs/outputs/{}.log".format(args.exp_name)
+    os.makedirs(os.path.join(args.log_dir, "outputs/"), exist_ok=True)
+    outputs_path = os.path.join(args.log_dir, "outputs/{}.log".format(args.exp_name))
     if not args.resume and os.path.exists(outputs_path):
         print(
             "ERROR: This experiment name is already used. \
@@ -432,9 +436,13 @@ def main_worker(gpu, ngpus_per_node, args):
         return
 
     # recording settings
-    models_path = "../logs/models/{}/".format(args.exp_name)
-    tb_path = "../logs/tb/{}".format(args.exp_name)  # TB: tensorboard
-    # tensorboardX
+    os.makedirs(
+        os.path.join(args.log_dir, "models/{}/".format(args.exp_name)), exist_ok=True
+    )
+    os.makedirs(os.path.join(args.log_dir, "tb/{}/".format(args.exp_name)))  # tb: tensorboard
+    models_path = os.path.join(args.log_dir, "models/{}/".format(args.exp_name))
+    tb_path = os.path.join(args.log_dir, "tb/{}/".format(args.exp_name))  # tb: tensorboard
+    # tensorboardX Writer
     writer = SummaryWriter(log_dir=tb_path)
 
     for epoch in range(args.start_epoch, args.epochs):
