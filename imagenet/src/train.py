@@ -1,5 +1,6 @@
 import argparse
 import os
+import pathlib
 import random
 import sys
 import time
@@ -18,19 +19,19 @@ import torchvision.transforms as transforms
 from torch.utils.tensorboard import SummaryWriter
 from torchvision import models
 
-from utils import (
-    save_model,
-    GaussianBlurAll,
-    RandomGaussianBlurAll,
+# add a path to load src module
+current_dir = pathlib.Path(os.path.abspath(__file__)).parent
+sys.path.append(str(current_dir) + "/../")
+
+from src.blur.blur_images import GaussianBlurAll, RandomGaussianBlurAll
+from src.utils.model import save_model, save_checkpoint
+from src.utils.adjust import (
+    adjust_learning_rate,
     adjust_multi_steps,
     adjust_multi_steps_cbt,
-    adjust_learning_rate,
-    AverageMeter,
-    accuracy,
-    save_checkpoint,
-    ProgressMeter,
-    print_settings,
 )
+from src.utils.accuracy import accuracy, AverageMeter, ProgressMeter
+from src.utils.print import print_settings
 
 ###################################################################
 # TODO: set path to ImageNet
