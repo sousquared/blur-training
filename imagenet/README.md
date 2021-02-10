@@ -1,17 +1,7 @@
 # Blur-Training with ImageNet 
 
 
-## Blurred images (GaussianBlur)
-Training images are blurred by Gaussian function. The images are more blurred as std.(σ) of Gaussian kernel is bigger.
-![blurred-images](./figures/blurred_images.png)
-
-
-## Schedule
-You can try different training schedule as for blurring images. Here is an overview of the training schedule:
-![schedule](./figures/schedule.png)
-
-
-## Preparation
+## Preparations
 - Install Python Packages  
 ```bash
 $ pip install -r requirements.txt
@@ -119,7 +109,7 @@ e.g.:
 $ python main.py -a resnet50 --seed 42 --lr 0.2 --mode normal --epochs 60 -b 512 --dist_url 'tcp://127.0.0.1:10000' --dist_backend 'nccl' --multiprocessing_distributed --world_size 1 --rank 0 -n resnet50_normal_b512
 ```
 
-## citation
+## citations
 Training scripts and functions are based on [pytorch tutorial][pytorch-tutorial] and [pytorch imagenet trainning example][pytorch-imagenet].
 
 

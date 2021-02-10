@@ -1,6 +1,6 @@
 # Blur-Training\_Cifar10
 
-## Preparation
+## Preparations
 If you want to run on GPU, you need to check your cuda's version and install pytorch like below.
 ```bash
 $ conda install pytorch torchvision cudatoolkit=9.0 -c pytorch
@@ -90,15 +90,15 @@ python main.py -e 90 --mode normal --resume ../logs/models/blur-half-epochs_s1/m
 - `logs/tb/` : records tensorboard outputs. (acc/train, acc/val, loss/train, loss/val)
 
 
-## data/: Cifar10
-`data/` directory will automaticaly be created when you run one of training scripts.  
+## dataset/: Cifar10
+`dataset/` directory will automatically be created when you run one of training scripts.  
 
 
-## notebook/  
+## notebooks/  
 Demonstrations and examples of Gaussian Blur.  
 
 
-## citation
+## citations
 Training scripts and functions are strongly relied on [pytorch tutorial][pytorch-tutorial] and [pytorch imagenet trainning example][pytorch-imagenet].
 
 

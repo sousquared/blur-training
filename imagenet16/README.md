@@ -2,16 +2,6 @@
 Blur-training with 16-class-ImageNet
 
 
-## Blurred images (GaussianBlur)
-Training images are blurred by Gaussian function. The images are more blurred as std.(σ) of Gaussian kernel is bigger.
-![blurred-images](./figures/blurred_images.png)
-
-
-## Schedule
-You can try different training schedule as for blurring images. Here is an overview of the training schedule:
-![schedule](./figures/schedule.png)
-
-
 ## CNNs Architecture
 **Default: AlexNet (16 class)**  
 Since the number of class is 16, I change the number of final units from 1000 to 16.
@@ -19,7 +9,7 @@ See more details in `notebooks/models.ipynb`
 You can also use another architecture by using `--arch [ARCHITECTURE NAME]`. See `python src/train.py -h` for the available models (from pytorchvision's model zoo).
 
 
-## Preparation
+## Preparations
 - Install Python Packages  
 ```bash
 $ pip install -r requirements.txt
@@ -102,7 +92,7 @@ $ python src/train.py --arch alexnet --mode mix -s 1 -n alexnet_mix_s1 --resume 
 Demonstrations of 16-class-ImageNet, GaussianBlur, and CNN model architectures.
 
 
-## citation
+## citations
 Training scripts and functions are based on [pytorch tutorial][pytorch-tutorial] and [pytorch imagenet trainning example][pytorch-imagenet].
 
 
