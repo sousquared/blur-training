@@ -27,7 +27,7 @@ If not, Download the ImageNet dataset from http://www.image-net.org/
 General usage example:
 ```bash
 $ cd training
-$ python src/train.py --arch [ARCHITECTURE NAME] --mode [TRAINING MODE] -n [EXPERIMENT NAME] 
+$ python -u src/train.py --arch [ARCHITECTURE NAME] --mode [TRAINING MODE] -n [EXPERIMENT NAME] 
 ```  
 
 For `train.py`, you need to use `--exp_name` or `-n` option to define your experiment's name. 
@@ -41,82 +41,82 @@ by using `--mode [TRAINING MODE]` option.
 This mode trains Normal model (default: AlexNet).  
 usage example:  
 ```bash
-$ python src/train.py --arch alexnet --mode normal -e 60 -b 64 --lr 0.01 -n alexnet_normal
+$ python -u src/train.py --arch alexnet --mode normal -e 60 -b 64 --lr 0.01 -n alexnet_normal
 ```
 You can also specify GPU by `--gpu`.  
 **(You don't need it if you have only single GPU in your machine.)**
 ```bash
-$ python -u train.py --gpu 0 -a alexnet --mode normal -n alexnet_normal
+$ python -u src/train.py --gpu 0 -a alexnet --mode normal -n alexnet_normal
 ```
 
 - **all**  
 This mode blurs ALL images in the training mode.  
 usage example:  
 ```bash
-$ python src/train.py --arch alexnet --mode all -s1 -n alexnet_all_s1
+$ python -u src/train.py --arch alexnet --mode all -s1 -n alexnet_all_s1
 ```
 
 - **mix**    
 This mode blurs half training data.
 usage example:  
 ```bash
-$ python src/train.py --arch alexnet --mode mix -s 1 -n alexnet_mix_s1
+$ python -u src/train.py --arch alexnet --mode mix -s 1 -n alexnet_mix_s1
 ```
 
 - **random-mix** <br>
 This mode blurs half training data **randomly**. <br>
 usage example:
 ```bash
-$ python src/train.py --arch alexnet --mode random-mix --min_sigma 0 --max_sigma 5 -n alexnet_random-mix_s0-5
+$ python -u src/train.py --arch alexnet --mode random-mix --min_sigma 0 --max_sigma 5 -n alexnet_random-mix_s0-5
 ```
 
 - **single-step**    
 This mode blurs first half epochs (e.g. first 30 epochs in 60 entire epochs) in the training.
 usage example:  
 ```bash
-$ python src/train.py --arch alexnet --mode single-step -s 1 -n alexnet_single-step_s1
+$ python -u src/train.py --arch alexnet --mode single-step -s 1 -n alexnet_single-step_s1
 ```
 
 - **fixed-single-step**    
 This mode blurs first half epochs in the training, then fixes the weights of 1st Conv layer.
 usage example:  
 ```bash
-python -u train.py -a alexnet --mode fixed-single-step -s 1 -n alexnet_fixed-single-step_s1
+python -u src/train.py -a alexnet --mode fixed-single-step -s 1 -n alexnet_fixed-single-step_s1
 ```
 
 - **reversed-single-step**    
 This mode is reversed order of single-step (blurs second half epochs).
 usage example:  
 ```bash
-$ python -u train.py -a alexnet --mode reversed-single-step --reverse_sigma 1 -n alexnet_reversed-single-step_s1
+$ python -u src/train.py -a alexnet --mode reversed-single-step --reverse_sigma 1 -n alexnet_reversed-single-step_s1
 ```
 
 - **multi-steps**  
 This mode blurs images step by step (e.g. every 10 epochs).  
 usage example:  
 ```bash
-$ python src/train.py --arch alexnet --mode multi-steps -n alexnet_multi-steps
+$ python -u src/train.py --arch alexnet --mode multi-steps -n alexnet_multi-steps
 ```
 
 - `--blur_val`   
 This option blurs validation data as well. 
 usage example:  
 ```bash
-$ python src/train.py --arch alexnet --mode mix -s 1 --blur_val -n alexnet_mix_lur-val_s1
+$ python -u src/train.py --arch alexnet --mode mix -s 1 --blur_val -n alexnet_mix_lur-val_s1
 ```
 
 - `--resume [PATH TO SAVED MODEL]`   
 This option trains your saved model starting from the latest epoch.  
 usage example:  
 ```bash
-$ python src/train.py --arch alexnet --mode mix -s 1 -n alexnet_mix_s1 --resume ../logs/models/alexnet_mix_s1/checkpoint.pth.tar 
+$ python -u src/train.py --arch alexnet --mode mix -s 1 -n alexnet_mix_s1 --resume ../logs/models/alexnet_mix_s1/checkpoint.pth.tar 
 ```
 
 ### Multi GPUs
 If you want to use multi GPUs trainig, see [pytorch imagenet trainning example][pytorch-imagenet].
 e.g.:
 ```bash 
-$ python src/train.py -a resnet50 --seed 42 --lr 0.2 --mode normal --epochs 60 -b 512 --dist_url 'tcp://127.0.0.1:10000' --dist_backend 'nccl' --multiprocessing_distributed --world_size 1 --rank 0 -n resnet50_normal_b512
+$ python -u src/train.py -a resnet50 --seed 42 --lr 0.2 --mode normal --epochs 60 -b 512 --dist_url 'tcp://127.0.0.1:10000' --dist_backend 'nccl' --multiprocessing_distributed --world_size 1 --rank 0 -n resnet50_normal_b512
 ```
 
 ## citation
