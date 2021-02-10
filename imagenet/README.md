@@ -26,7 +26,6 @@ If not, Download the ImageNet dataset from http://www.image-net.org/
 ## run examples
 General usage example:
 ```bash
-$ cd training
 $ python -u src/train.py --arch [ARCHITECTURE NAME] --mode [TRAINING MODE] -n [EXPERIMENT NAME] 
 ```  
 
