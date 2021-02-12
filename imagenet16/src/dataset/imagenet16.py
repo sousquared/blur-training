@@ -9,17 +9,19 @@ current_dir = pathlib.Path(os.path.abspath(__file__)).parent
 
 
 def load_data(
-    batch_size,
-    in_path="/mnt/data/ImageNet/ILSVRC2012/",
-    in_info_path=str(current_dir) + "/info/",
+    batch_size: int,
+    in_path: str = "/mnt/data/ImageNet/ILSVRC2012/",
+    in_info_path: str = str(current_dir) + "/info/",
+    normalize: bool = True,
 ):
     """
     load 16-class-ImageNet
     Arguments:
-        batch_size: the batch size used in training and test
-        in_path: the path to ImageNet
-        in_info_path: the path to the directory that contains
+        batch_size (int): the batch size used in training and test
+        in_path (str): the path to ImageNet
+        in_info_path (str): the path to the directory that contains
                     imagenet_class_index.json, wordnet.is_a.txt, words.txt
+        normalize (bool): Use normalization on images or nor. (default: True)
     Returns: train_loader, test_loader
     """
 
@@ -32,13 +34,14 @@ def load_data(
     # data augumentation for imagenet in robustness library is:
     # https://github.com/MadryLab/robustness/blob/master/robustness/data_augmentation.py
 
-    # standard ImageNet normalization
-    normalize = transforms.Normalize(
-        mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
-    )
-    # add normalization
-    custom_dataset.transform_train.transforms.append(normalize)
-    custom_dataset.transform_test.transforms.append(normalize)
+    if normalize:
+        # standard ImageNet normalization
+        normalize = transforms.Normalize(
+            mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
+        )
+        # add normalization
+        custom_dataset.transform_train.transforms.append(normalize)
+        custom_dataset.transform_test.transforms.append(normalize)
 
     train_loader, test_loader = custom_dataset.make_loaders(
         workers=10, batch_size=batch_size
