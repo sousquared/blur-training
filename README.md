@@ -15,7 +15,7 @@ You can try different training schedule as for blurring images. Here is an overv
 
 # Datasets
 Each repository contains the training scripts with each dataset below: <br>
-(Note that you have to download and/or put the path to the dataset.)
+(Note that you have to download ImageNet by yourself.)
 - [`./imagenet/`][imagenet]: Training with ImageNet dataset
 - [`./imagenet16/`][imagenet16]: Training with 16-class-ImageNet dataset 
   This dataset is from Geirhos et al., 2018. <br>

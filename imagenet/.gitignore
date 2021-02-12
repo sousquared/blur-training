@@ -1,4 +1,4 @@
-# logs/ will automatically by created
+# logs/ will be automatically created by training script.
 logs/
 
 __pycache__/
@@ -6,3 +6,7 @@ __pycache__/
 .ipynb_checkpoints/
 
 *.sh
+
+# for analysis and notebooks
+results/
+plots/
