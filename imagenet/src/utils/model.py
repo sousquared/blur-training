@@ -16,11 +16,13 @@ def save_model(state, param_path, epoch):
     torch.save(state, filename)
 
 
-def load_model(model_path, arch="alexnet"):
+def load_model(model_path, arch="alexnet", paralell=True):
     """Load model.
     Args:
         model_path: Path to the pytorch saved file of the model you want to use
         arch: Architecture of CNN
+        paralell: False if you want to disable DataParallel
+
     Returns: CNN model
     """
     checkpoint = torch.load(model_path, map_location="cuda:0")
@@ -30,5 +32,7 @@ def load_model(model_path, arch="alexnet"):
     except RuntimeError:
         model.features = torch.nn.DataParallel(model.features)
         model.load_state_dict(checkpoint["state_dict"])
-        # model.features = model.features.module  # if you want to disable DataParallel
+        if not paralell:
+            model.features = model.features.module
+            # TODO: This part is different when a model is "resnet".
     return model
