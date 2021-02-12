@@ -439,9 +439,13 @@ def main_worker(gpu, ngpus_per_node, args):
     os.makedirs(
         os.path.join(args.log_dir, "models/{}/".format(args.exp_name)), exist_ok=True
     )
-    os.makedirs(os.path.join(args.log_dir, "tb/{}/".format(args.exp_name)))  # tb: tensorboard
+    os.makedirs(
+        os.path.join(args.log_dir, "tb/{}/".format(args.exp_name))
+    )  # tb: tensorboard
     models_path = os.path.join(args.log_dir, "models/{}/".format(args.exp_name))
-    tb_path = os.path.join(args.log_dir, "tb/{}/".format(args.exp_name))  # tb: tensorboard
+    tb_path = os.path.join(
+        args.log_dir, "tb/{}/".format(args.exp_name)
+    )  # tb: tensorboard
     # tensorboardX Writer
     writer = SummaryWriter(log_dir=tb_path)
 
