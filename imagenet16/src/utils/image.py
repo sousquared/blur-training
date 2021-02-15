@@ -1,12 +1,17 @@
+from matplotlib.image import imsave
 import matplotlib.pyplot as plt
 import torch
 
 
-def imshow(img, title="", filename="", scale=True, unnormalize=False):
+def imshow(
+    img, unnormalize=False, dpi=None, scale=True, title="", filename="", save_raw=False
+):
     if unnormalize:
         img = img / 4 + 0.5
     if type(img) == torch.Tensor:
         img = img.numpy().transpose(1, 2, 0)
+    if dpi:
+        plt.figure(dpi=dpi)
     plt.imshow(img)
     if not scale:
         plt.xticks([])  # if you want to remove scale axes
@@ -14,5 +19,8 @@ def imshow(img, title="", filename="", scale=True, unnormalize=False):
     if title:
         plt.title(title)
     if filename:
-        plt.savefig(filename)  # added for saving the image
+        if save_raw:
+            imsave(filename, img)  # save the raw image
+        else:
+            plt.savefig(filename)
     plt.show()
