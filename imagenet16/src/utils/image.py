@@ -2,8 +2,9 @@ import matplotlib.pyplot as plt
 import torch
 
 
-def imshow(img, title="", filename="", scale=True):
-    # img = img / 4 + 0.5     # unnormalize
+def imshow(img, title="", filename="", scale=True, unnormalize=False):
+    if unnormalize:
+        img = img / 4 + 0.5
     if type(img) == torch.Tensor:
         img = img.numpy().transpose(1, 2, 0)
     plt.imshow(img)
