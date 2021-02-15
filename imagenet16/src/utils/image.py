@@ -20,7 +20,12 @@ def imshow(
         plt.title(title)
     if filename:
         if save_raw:
+            # clipping
+            img = np.where(img > 1, 1, img)
+            img = np.where(img < 0, 0, img)
+            
             imsave(filename, img)  # save the raw image
+            
         else:
             plt.savefig(filename)
     plt.show()
