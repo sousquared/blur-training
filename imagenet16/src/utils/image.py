@@ -1,6 +1,7 @@
-from matplotlib.image import imsave
 import matplotlib.pyplot as plt
+import numpy as np
 import torch
+from matplotlib.image import imsave
 
 
 def imshow(
@@ -23,9 +24,9 @@ def imshow(
             # clipping
             img = np.where(img > 1, 1, img)
             img = np.where(img < 0, 0, img)
-            
+
             imsave(filename, img)  # save the raw image
-            
+
         else:
             plt.savefig(filename)
     plt.show()
