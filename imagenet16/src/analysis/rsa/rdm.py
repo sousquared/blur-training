@@ -3,6 +3,10 @@ import torch
 
 class AlexNetRDM:
     def __init__(self, model):
+        """
+        Args:
+            model: Alexnet model (PyTorch)
+        """
         self.model = model
         self.layers = [
             "conv-relu-1",
@@ -52,7 +56,6 @@ class AlexNetRDM:
     def compute_activations(self, images: torch.Tensor):
         """Computes activations of units in a model.
         Args:
-            model: model to examine.
             images: images to test the model with. shape=(N, C, H, W)
         Returns: activations
         """
