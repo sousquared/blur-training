@@ -1,4 +1,6 @@
+import numpy as np
 import torch
+from scipy.spatial.distance import squareform, pdist
 
 
 class AlexNetRDM:
@@ -8,6 +10,7 @@ class AlexNetRDM:
             model: Alexnet model (PyTorch)
         """
         self.model = model
+
         self.layers = [
             "conv-relu-1",
             "conv-relu-2",
@@ -18,6 +21,7 @@ class AlexNetRDM:
             "fc-relu-2",
             "last-outputs",
         ]
+
         self.activations = {}
 
         self.model.features[1].register_forward_hook(
@@ -53,13 +57,46 @@ class AlexNetRDM:
 
         return hook
 
-    def compute_activations(self, images: torch.Tensor):
+    def compute_activations(self, images: torch.Tensor) -> dict:
         """Computes activations of units in a model.
         Args:
             images: images to test the model with. shape=(N, C, H, W)
+
         Returns: activations
         """
 
         _ = self.model(images)
 
         return self.activations
+
+    def compute_mean_rdms(self, images: torch.Tensor) -> dict:
+        """Computes RDM for each image and return mean RDMs.
+        Args:
+            images: images to test the model with. shape=(N, F+1, C, H, W)
+                Where: F is the number of band-pass filters.
+                    F+1 means filter applied images(F) and a raw image(+1)
+
+        Returns: Mean RDMs (Dict)
+        """
+        num_filters = images.shape[1] - 1
+        mean_rdms = {}
+
+        for layer in self.layers:
+            rdms = []
+            # compute RDM for each image (with some filters applied)
+            for imgs in images:
+                # shape of imgs == (F+1, C, H, W)
+                # where F is the number of band-pass filters.
+                # F+1 means band-pass filters(F) and raw image(+1)
+                activations = self.compute_activations(imgs)
+                activation = activations[layer].view(num_filters + 1, -1).cpu().numpy()
+                rdm = squareform(pdist(activation, metric="correlation"))
+                rdms.append(rdm)
+
+            rdms = np.array(rdms)
+
+            mean_rdm = rdms.mean(0)
+
+            mean_rdms[layer] = mean_rdm
+
+        return mean_rdms
