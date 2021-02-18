@@ -15,6 +15,7 @@ from src.utils.model import load_model
 from src.utils.image import imsave
 from src.analysis.rsa.rdm import AlexNetRDM
 from src.analysis.rsa.bandpass_images import make_bandpass_images
+from src.dataset.imagenet16 import label_map
 
 
 def compute_mean_rdms(models_dir, model_name, epoch, test_images, out_dir):
@@ -84,7 +85,7 @@ if __name__ == "__main__":
     num_filters = test_images.shape[1] - 1
 
     # save test images
-    image_name = f"bandpass_f{num_filters}_n{num_images}.png"
+    image_name = f"bandpass_{label_map[target_id]}_f{num_filters}_n{num_images}.png"
     imsave(
         torchvision.utils.make_grid(
             test_images.reshape(-1, *test_images.shape[2:]).cpu(),
