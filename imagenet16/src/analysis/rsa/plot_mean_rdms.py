@@ -11,6 +11,7 @@ current_dir = pathlib.Path(os.path.abspath(__file__)).parent
 sys.path.append(str(current_dir) + "/../../../")
 
 from src.analysis.rsa.rdm import alexnet_layers
+from src.dataset.imagenet16 import label_map
 
 
 def load_rdms(in_dir, model_name, epoch):
