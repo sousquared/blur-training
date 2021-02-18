@@ -25,6 +25,10 @@ def compute_mean_rdms(models_dir, model_name, epoch, test_images, out_dir):
     RDM = AlexNetRDM(model)
     mean_rdms = RDM.compute_mean_rdms(test_images)
 
+    # add parameter settings of this analysis
+    mean_rdms["num_images"] = test_images.shape[0]
+    mean_rdms["num_filters"] = test_images.shape[1] - 1
+
     # save dict object
     file_path = os.path.join(out_dir, model_name + f"_e{epoch:02d}.pkl")
     with open(file_path, "wb") as f:
