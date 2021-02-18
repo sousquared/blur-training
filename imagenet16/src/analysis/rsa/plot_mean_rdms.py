@@ -76,7 +76,7 @@ def plot_rdms(in_dir, model_name, epoch, out_dir):
     fig.suptitle(title)
     # fig.tight_layout(rect=[0, 0, .9, 1])
     fig.tight_layout()
-    filename = "rdms_{}_e{}_{}_f{}_n{}.png".format(
+    filename = "mean-rdms_{}_e{}_{}_f{}_n{}.png".format(
         model_name, epoch, label_map[target_id], num_images, num_images
     )
     plt.savefig(os.path.join(out_dir, filename))
