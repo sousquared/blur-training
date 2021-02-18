@@ -43,7 +43,7 @@ def make_bandpass_images(
     new_test_images = torch.zeros([len(sigma_list) + 1, num_images, 3, 224, 224])
     new_test_images[0] = test_images[target_id]
     for i, s in enumerate(sigma_list, 1):
-        if i == 0:
+        if s == 0:
             low1 = GaussianBlurAll(test_images[target_id], sigma=0)
             low2 = GaussianBlurAll(test_images[target_id], sigma=1)
         else:
