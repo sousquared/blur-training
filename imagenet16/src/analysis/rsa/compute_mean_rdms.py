@@ -81,12 +81,14 @@ if __name__ == "__main__":
     # change the order of num_images and num_filters(+1)
     test_images = test_images.transpose(1, 0)
 
+    num_filters = test_images.shape[1] - 1
+
     # save test images
-    image_name = f"bandpass_n{num_images}.png"
+    image_name = f"bandpass_f{num_filters}_n{num_images}.png"
     imsave(
         torchvision.utils.make_grid(
             test_images.reshape(-1, *test_images.shape[2:]).cpu(),
-            nrow=test_images.shape[1],
+            nrow=num_filters + 1,
         ),
         filename=os.path.join(test_images_dir, image_name),
         unnormalize=True,
