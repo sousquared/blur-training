@@ -3,6 +3,18 @@ import torch
 from scipy.spatial.distance import squareform, pdist
 
 
+alexnet_layers = [
+    "conv-relu-1",
+    "conv-relu-2",
+    "conv-relu-3",
+    "conv-relu-4",
+    "conv-relu-5",
+    "fc-relu-1",
+    "fc-relu-2",
+    "last-outputs",
+]
+
+
 class AlexNetRDM:
     def __init__(self, model):
         """
@@ -11,16 +23,7 @@ class AlexNetRDM:
         """
         self.model = model
 
-        self.layers = [
-            "conv-relu-1",
-            "conv-relu-2",
-            "conv-relu-3",
-            "conv-relu-4",
-            "conv-relu-5",
-            "fc-relu-1",
-            "fc-relu-2",
-            "last-outputs",
-        ]
+        self.layers = alexnet_layers
 
         self.activations = {}
 
