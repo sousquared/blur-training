@@ -17,6 +17,20 @@ from src.analysis.rsa.rdm import AlexNetRDM
 from src.analysis.rsa.bandpass_images import make_bandpass_images
 
 
+def compute_mean_rdms(models_dir, model_name, epoch, test_images, out_dir):
+    """Computes and save mean RDMs."""
+    model_path = os.path.join(models_dir, model_name, f"epoch_{epoch:02d}.pth.tar")
+    model = load_model(arch=arch, model_path=model_path).to(device)
+
+    RDM = AlexNetRDM(model)
+    mean_rdms = RDM.compute_mean_rdms(test_images)
+
+    # save dict object
+    file_path = os.path.join(out_dir, model_name + f"_e{epoch:02d}.pkl")
+    with open(file_path, "wb") as f:
+        pickle.dump(mean_rdms, f)
+
+
 if __name__ == "__main__":
     """Run example for normal alexnet with band-pass test images."""
     # arguments
@@ -66,13 +80,10 @@ if __name__ == "__main__":
         unnormalize=True,
     )
 
-    model_path = os.path.join(models_dir, model_name, f"epoch_{epoch:02d}.pth.tar")
-    model = load_model(arch=arch, model_path=model_path).to(device)
-
-    RDM = AlexNetRDM(model)
-    mean_rdms = RDM.compute_mean_rdms(test_images)
-
-    # save dict object
-    file_path = os.path.join(out_dir, model_name + f"_e{epoch:02d}.pkl")
-    with open(file_path, "wb") as f:
-        pickle.dump(mean_rdms, f)
+    compute_mean_rdms(
+        models_dir=models_dir,
+        model_name=model_name,
+        epoch=epoch,
+        test_images=test_images,
+        out_dir=out_dir,
+    )
