@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     # I/O settings
     models_dir = "/mnt/work/blur-training/imagenet16/logs/models/"  # model directory
-    out_dir = "./results/{}_bandpass".format(arch)
+    out_dir = f"./results/{arch}_bandpass"
     test_images_dir = "./test-images"  # directory for test images overview file
     assert os.path.exists(models_dir), f"{models_dir} does not exist."
     if not os.path.exists(out_dir):
