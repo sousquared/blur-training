@@ -18,7 +18,12 @@ from src.analysis.rsa.bandpass_images import make_bandpass_images
 
 
 def compute_mean_rdms(models_dir, model_name, epoch, test_images, out_dir):
-    """Computes and save mean RDMs."""
+    """Computes and save mean RDMs.
+    Args:
+        test_images: images to test the model with. shape=(N, F+1, C, H, W)
+            Where: F is the number of filters.
+                F+1 means filter applied images(F) and a raw image(+1)
+    """
     model_path = os.path.join(models_dir, model_name, f"epoch_{epoch:02d}.pth.tar")
     model = load_model(arch=arch, model_path=model_path).to(device)
 
@@ -30,7 +35,8 @@ def compute_mean_rdms(models_dir, model_name, epoch, test_images, out_dir):
     mean_rdms["num_filters"] = test_images.shape[1] - 1
 
     # save dict object
-    file_path = os.path.join(out_dir, model_name + f"_e{epoch:02d}.pkl")
+    file_name = model_name + f"_e{epoch:02d}.pkl"
+    file_path = os.path.join(out_dir, file_name)
     with open(file_path, "wb") as f:
         pickle.dump(mean_rdms, f)
 
