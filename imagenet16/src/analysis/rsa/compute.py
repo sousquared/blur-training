@@ -33,6 +33,8 @@ def compute_mean_rdms(models_dir, model_name, epoch, test_images, out_dir):
     # add parameter settings of this analysis
     mean_rdms["num_images"] = test_images.shape[0]
     mean_rdms["num_filters"] = test_images.shape[1] - 1
+    global target_id
+    mean_rdms["target_id"] = target_id
 
     # save dict object
     file_name = model_name + f"_e{epoch:02d}.pkl"
