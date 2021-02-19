@@ -23,6 +23,7 @@ def analyze(
     arch: str,
     model_name: str,
     epoch: int,
+    device: torch.device,
     test_images: torch.Tensor,
     target_id: int,
     num_filters: int,
@@ -119,23 +120,10 @@ if __name__ == "__main__":
         arch=arch,
         model_name=model_name,
         epoch=epoch,
+        device=device,
         test_images=test_images,
         target_id=target_id,
         num_filters=num_filters,
         num_images=num_images,
         out_dir=out_dir,
     )
-    # # load trained model
-    # model_path = os.path.join(models_dir, model_name, f"epoch_{epoch:02d}.pth.tar")
-    # model = load_model(arch=arch, model_path=model_path).to(device)
-    #
-    # mean_rdms = compute_mean_rdms(model=model, test_images=test_images)
-    #
-    # # add parameter settings of this analysis
-    # mean_rdms["target_id"] = target_id
-    # mean_rdms["num_filters"] = num_filters
-    # mean_rdms["num_images"] = num_images
-    #
-    # save_mean_rdms(
-    #     mean_rdms=mean_rdms, out_dir=out_dir, model_name=model_name, epoch=epoch
-    # )
