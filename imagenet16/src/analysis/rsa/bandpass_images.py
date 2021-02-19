@@ -18,9 +18,10 @@ def make_bandpass_images(
     num_filters: int = 6,
     num_images: int = 10,
 ) -> torch.Tensor:
-    """Return test images consisting of (num_images) images for each class.
+    """Makes band-passed test images (1 class).
     Arguments:
         target_id (int): label id of the target category. Default: 1
+        num_filters: number of band-pass filters.
         num_images (int): number of images for each class. Default: 10
 
     Returns: images (torch.Tensor)
