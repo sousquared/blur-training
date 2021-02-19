@@ -18,25 +18,43 @@ from src.analysis.rsa.bandpass_images import make_bandpass_images
 from src.dataset.imagenet16 import label_map
 
 
-def compute_mean_rdms(models_dir, model_name, epoch, test_images, out_dir):
+def analyze(
+    models_dir: str,
+    arch: str,
+    model_name: str,
+    epoch: int,
+    test_images: torch.Tensor,
+    target_id: int,
+    num_filters: int,
+    num_images: int,
+    out_dir: str,
+):
+    model_path = os.path.join(models_dir, model_name, f"epoch_{epoch:02d}.pth.tar")
+    model = load_model(arch=arch, model_path=model_path).to(device)
+    mean_rdms = compute_mean_rdms(model=model, test_images=test_images)
+    # add parameter settings of this analysis
+    mean_rdms["target_id"] = target_id
+    mean_rdms["num_filters"] = num_filters
+    mean_rdms["num_images"] = num_images
+    save_mean_rdms(
+        mean_rdms=mean_rdms, out_dir=out_dir, model_name=model_name, epoch=epoch
+    )
+
+
+def compute_mean_rdms(model, test_images) -> dict:
     """Computes and save mean RDMs.
     Args:
         test_images: images to test the model with. shape=(N, F+1, C, H, W)
             Where: F is the number of filters.
                 F+1 means filter applied images(F) and a raw image(+1)
     """
-    model_path = os.path.join(models_dir, model_name, f"epoch_{epoch:02d}.pth.tar")
-    model = load_model(arch=arch, model_path=model_path).to(device)
-
     RDM = AlexNetRDM(model)
     mean_rdms = RDM.compute_mean_rdms(test_images)
 
-    # add parameter settings of this analysis
-    mean_rdms["num_images"] = test_images.shape[0]
-    mean_rdms["num_filters"] = test_images.shape[1] - 1
-    global target_id
-    mean_rdms["target_id"] = target_id
+    return mean_rdms
 
+
+def save_mean_rdms(mean_rdms: dict, out_dir: str, model_name: str, epoch: int):
     # save dict object
     file_name = model_name + f"_e{epoch:02d}.pkl"
     file_path = os.path.join(out_dir, file_name)
@@ -65,6 +83,7 @@ if __name__ == "__main__":
     # data settings
     # num_data = 1600
     target_id = 1  # bear
+    num_filters = 6  # number of band-pass filters
     num_images = 10  # number of images for each class.
 
     # random seed settings
@@ -77,12 +96,12 @@ if __name__ == "__main__":
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     # load and make test images
-    test_images = make_bandpass_images(target_id, num_images).to(device)
+    test_images = make_bandpass_images(
+        target_id=target_id, num_filters=num_filters, num_images=num_images
+    ).to(device)
 
     # change the order of num_images and num_filters(+1)
     test_images = test_images.transpose(1, 0)
-
-    num_filters = test_images.shape[1] - 1
 
     # save test images
     image_name = f"bandpass_{label_map[target_id]}_f{num_filters}_n{num_images}.png"
@@ -95,10 +114,28 @@ if __name__ == "__main__":
         unnormalize=True,
     )
 
-    compute_mean_rdms(
+    analyze(
         models_dir=models_dir,
+        arch=arch,
         model_name=model_name,
         epoch=epoch,
         test_images=test_images,
+        target_id=target_id,
+        num_filters=num_filters,
+        num_images=num_images,
         out_dir=out_dir,
     )
+    # # load trained model
+    # model_path = os.path.join(models_dir, model_name, f"epoch_{epoch:02d}.pth.tar")
+    # model = load_model(arch=arch, model_path=model_path).to(device)
+    #
+    # mean_rdms = compute_mean_rdms(model=model, test_images=test_images)
+    #
+    # # add parameter settings of this analysis
+    # mean_rdms["target_id"] = target_id
+    # mean_rdms["num_filters"] = num_filters
+    # mean_rdms["num_images"] = num_images
+    #
+    # save_mean_rdms(
+    #     mean_rdms=mean_rdms, out_dir=out_dir, model_name=model_name, epoch=epoch
+    # )
