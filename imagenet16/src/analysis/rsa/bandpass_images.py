@@ -1,6 +1,7 @@
 import os
 import pathlib
 import sys
+from typing import Dict, Optional, List
 
 import torch
 
@@ -14,6 +15,7 @@ from src.images.lowpass import GaussianBlurAll
 
 def make_bandpass_images(
     target_id: int = 1,
+    num_filters: int = 6,
     num_images: int = 10,
 ) -> torch.Tensor:
     """Return test images consisting of (num_images) images for each class.
@@ -37,20 +39,34 @@ def make_bandpass_images(
                 test_images[label_id][int(counts[label_id])] = image
                 counts[label_id] += 1
 
+    new_test_images = torch.zeros([num_filters + 1, num_images, 3, 224, 224])
+
+    new_test_images[0] = test_images[target_id]  # add raw images
+
     # bandpass images
-    sigma_list = [2 ** i for i in range(5)]
-    sigma_list.insert(0, 0)
-    new_test_images = torch.zeros([len(sigma_list) + 1, num_images, 3, 224, 224])
-    new_test_images[0] = test_images[target_id]
-    for i, s in enumerate(sigma_list, 1):
-        if s == 0:
-            low1 = GaussianBlurAll(test_images[target_id], sigma=0)
-            low2 = GaussianBlurAll(test_images[target_id], sigma=1)
+    filters = make_bandpass_filters(num_filters=num_filters)
+    for i, (s1, s2) in enumerate(filters.values(), 1):
+        low1 = GaussianBlurAll(test_images[target_id], sigma=s1)
+        if s2 == None:
+            new_test_images[i] = low1
         else:
-            low1 = GaussianBlurAll(test_images[target_id], sigma=s)
-            low2 = GaussianBlurAll(test_images[target_id], sigma=s * 2)
-        new_test_images[i] = low1 - low2
+            low2 = GaussianBlurAll(test_images[target_id], sigma=s2)
+            new_test_images[i] = low1 - low2
 
     # reshape to (N, C, H, W)
     # new_test_images = new_test_images.view(-1, *test_images.shape[2:])
     return new_test_images
+
+
+def make_bandpass_filters(
+    num_filters: int = 6,
+) -> Dict[int, Optional[List[int]]]:
+    filters = {}
+    filters[0] = [0, 1]
+    for i in range(1, num_filters):
+        if i == (num_filters - 1):
+            filters[i] = [2 ** (i - 1), None]  # last band-pass is low-pass filter
+        else:
+            filters[i] = [2 ** (i - 1), 2 ** i]
+
+    return filters
