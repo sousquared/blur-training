@@ -10,7 +10,7 @@ current_dir = pathlib.Path(os.path.abspath(__file__)).parent
 sys.path.append(str(current_dir) + "/../../../")
 
 from src.dataset.imagenet16 import load_data, num_classes
-from src.images.bandpass import apply_bandpass
+from src.images.bandpass import apply_bandpass_filter
 
 
 def make_bandpass_images(
@@ -50,7 +50,7 @@ def make_bandpass_images(
     # bandpass images
     filters = make_bandpass_filters(num_filters=num_filters)
     for i, (s1, s2) in enumerate(filters.values(), 1):
-        new_test_images[i] = apply_bandpass(images=raw, s1=s1, s2=s2)
+        new_test_images[i] = apply_bandpass_filter(images=raw, s1=s1, s2=s2)
 
     # reshape to (N, C, H, W)
     # new_test_images = new_test_images.view(-1, *test_images.shape[2:])
