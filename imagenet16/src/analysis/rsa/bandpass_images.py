@@ -10,7 +10,7 @@ current_dir = pathlib.Path(os.path.abspath(__file__)).parent
 sys.path.append(str(current_dir) + "/../../../")
 
 from src.dataset.imagenet16 import load_data, num_classes
-from src.images.lowpass import GaussianBlurAll
+from src.images.bandpass import apply_bandpass
 
 
 def make_bandpass_images(
@@ -39,19 +39,17 @@ def make_bandpass_images(
                 test_images[label_id][int(counts[label_id])] = image
                 counts[label_id] += 1
 
+    # choose one class
+    raw = test_images[target_id]
+
     new_test_images = torch.zeros([num_filters + 1, num_images, 3, 224, 224])
 
-    new_test_images[0] = test_images[target_id]  # add raw images
+    new_test_images[0] = raw  # add raw images
 
     # bandpass images
     filters = make_bandpass_filters(num_filters=num_filters)
     for i, (s1, s2) in enumerate(filters.values(), 1):
-        low1 = GaussianBlurAll(test_images[target_id], sigma=s1)
-        if s2 == None:
-            new_test_images[i] = low1
-        else:
-            low2 = GaussianBlurAll(test_images[target_id], sigma=s2)
-            new_test_images[i] = low1 - low2
+        new_test_images[i] = apply_bandpass(images=raw, s1=s1, s2=s2)
 
     # reshape to (N, C, H, W)
     # new_test_images = new_test_images.view(-1, *test_images.shape[2:])
