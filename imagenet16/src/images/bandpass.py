@@ -2,6 +2,7 @@ import torch
 
 from .lowpass import GaussianBlurAll
 
+
 def apply_bandpass(images: torch.Tensor, s1: float, s2: float):
     """Apply band-pass filter to input images
     Args:
