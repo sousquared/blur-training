@@ -10,7 +10,7 @@ import torch
 current_dir = pathlib.Path(os.path.abspath(__file__)).parent
 sys.path.append(str(current_dir) + "/../../../")
 
-from src.dataset.imagenet16 import load_data, num_classes
+from src.dataset.imagenet16 import load_data, num_classes, num_channels, height, width
 from src.images.bandpass import apply_bandpass_filter
 
 
@@ -34,7 +34,7 @@ def make_bandpass_images(
     # choose one class
     raw_images = raw_images[target_id]  # (N, C, H, W)
 
-    test_images = torch.zeros([num_filters + 1, num_images, 3, 224, 224])
+    test_images = torch.zeros([num_filters + 1, num_images, num_channels, height, width])
 
     test_images[0] = raw_images  # add raw images
 
@@ -74,7 +74,7 @@ def make_bandpass_images_all(
     filters = make_bandpass_filters(num_filters=num_filters)
     filter_comb = make_filter_combinations(filters=filters)
 
-    test_images = torch.zeros([len(filter_comb) + 1, num_images, 3, 224, 224])
+    test_images = torch.zeros([len(filter_comb) + 1, num_images, num_channels, height, width])
 
     test_images[0] = raw_images  # add raw images
 
@@ -101,7 +101,7 @@ def make_test_images_by_class(num_images: int = 10) -> torch.Tensor:
     _, test_loader = load_data(batch_size=32)
 
     counts = torch.zeros(num_classes)
-    test_images = torch.zeros([num_classes, num_images, 3, 224, 224])
+    test_images = torch.zeros([num_classes, num_images, num_channels, height, width])
     for images, labels in test_loader:
         for image, label in zip(images, labels):
             label_id = label.item()

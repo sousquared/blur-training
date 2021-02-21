@@ -8,6 +8,9 @@ from robustness.tools.imagenet_helpers import common_superclass_wnid, ImageNetHi
 current_dir = pathlib.Path(os.path.abspath(__file__)).parent
 
 num_classes = 16
+num_channels = 3
+height = 224
+width = 224
 
 categories = sorted(
     [
