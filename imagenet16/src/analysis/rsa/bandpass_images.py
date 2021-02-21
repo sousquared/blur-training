@@ -30,7 +30,9 @@ def make_bandpass_images(
             where: num_classes = 16
     """
     # choose one class as test images
-    raw_images = make_one_class_test_images(target_id=target_id, num_images=num_images)
+    raw_images = make_test_images_by_class(num_images=num_images)
+    # choose one class
+    raw_images = raw_images[target_id]  # (N, C, H, W)
 
     test_images = torch.zeros([num_filters + 1, num_images, 3, 224, 224])
 
@@ -64,7 +66,9 @@ def make_bandpass_images_all(
             where: num_classes = 16
     """
     # choose one class as test images
-    raw_images = make_one_class_test_images(target_id=target_id, num_images=num_images)
+    raw_images = make_test_images_by_class(num_images=num_images)
+    # choose one class
+    raw_images = raw_images[target_id]  # (N, C, H, W)
 
     # make filter combinations
     filters = make_bandpass_filters(num_filters=num_filters)
@@ -86,15 +90,13 @@ def make_bandpass_images_all(
     return test_images
 
 
-def make_one_class_test_images(
-    target_id: int = 1, num_images: int = 10
-) -> torch.Tensor:
-    """Makes test images with one class chosen.
+def make_test_images_by_class(num_images: int = 10) -> torch.Tensor:
+    """Makes test images along class labels.
     Args:
-        target_id (int): label id of the target category. Default: 1
         num_images (int): number of images for each class. Default: 10
 
-    Returns: test images (N, C, H, W)
+    Returns: test images (num_classes, N, C, H, W)
+        where: num_classes = 16
     """
     _, test_loader = load_data(batch_size=32)
 
@@ -107,9 +109,7 @@ def make_one_class_test_images(
                 test_images[label_id][int(counts[label_id])] = image
                 counts[label_id] += 1
 
-    # test_images: shape=(num_classes, C, H, W)
-    # choose one class
-    return test_images[target_id]  # (N, C, H, W)
+    return test_images
 
 
 def make_bandpass_filters(
