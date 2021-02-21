@@ -26,7 +26,7 @@ def make_bandpass_images(
         num_images (int): number of images for each class. Default: 10
 
     Returns: images (torch.Tensor)
-        shape: (num_filters + 1, num_images, 3, 244, 244)
+        shape: (num_images, num_filters + 1, 3, 244, 244)
             where:
                 num_classes = 16
     """
@@ -55,7 +55,9 @@ def make_bandpass_images(
 
     # reshape to (-1, C, H, W)
     # new_test_images = new_test_images.view(-1, *test_images.shape[2:])
-    return new_test_images
+
+    # change the order of num_images and num_filters(+1)
+    return new_test_images.transpose(1, 0)
 
 
 def make_bandpass_images_all(

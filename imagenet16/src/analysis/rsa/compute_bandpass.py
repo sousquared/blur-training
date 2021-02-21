@@ -101,9 +101,6 @@ if __name__ == "__main__":
         target_id=target_id, num_filters=num_filters, num_images=num_images
     ).to(device)
 
-    # change the order of num_images and num_filters(+1)
-    test_images = test_images.transpose(1, 0)
-
     # save test images
     image_name = f"bandpass_{label_map[target_id]}_f{num_filters}_n{num_images}.png"
     imsave(
