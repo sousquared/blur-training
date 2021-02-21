@@ -26,7 +26,7 @@ def make_bandpass_images(
         num_images (int): number of images for each class. Default: 10
 
     Returns: images (torch.Tensor)
-        shape: (num_classes*num_images, 3, 244, 244)
+        shape: (num_filters + 1, num_images, 3, 244, 244)
             where:
                 num_classes = 16
     """
@@ -42,7 +42,7 @@ def make_bandpass_images(
                 counts[label_id] += 1
 
     # choose one class
-    raw = test_images[target_id]
+    raw = test_images[target_id]  # (N, C, H, W)
 
     new_test_images = torch.zeros([num_filters + 1, num_images, 3, 224, 224])
 
@@ -53,7 +53,7 @@ def make_bandpass_images(
     for i, (s1, s2) in enumerate(filters.values(), 1):
         new_test_images[i] = apply_bandpass_filter(images=raw, s1=s1, s2=s2)
 
-    # reshape to (N, C, H, W)
+    # reshape to (-1, C, H, W)
     # new_test_images = new_test_images.view(-1, *test_images.shape[2:])
     return new_test_images
 
