@@ -10,7 +10,7 @@ def apply_bandpass_filter(images: torch.Tensor, s1: float, s2: float) -> torch.T
         s1 (float): sigma1
         s2 (float): sigma2
 
-    Returns: band-passed images (torch.Tensor)
+    Returns (torch.Tensor): band-passed images (N, C, H, W)
     """
     low1 = GaussianBlurAll(images, sigma=s1)
     if s2 == None:
