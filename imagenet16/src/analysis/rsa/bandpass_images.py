@@ -112,7 +112,7 @@ def make_test_images_by_class(num_images: int = 10) -> torch.Tensor:
     for images, labels in test_loader:
         for image, label in zip(images, labels):
             label_id = label.item()
-            if counts[label_id] < 10:
+            if counts[label_id] < num_images:
                 test_images[label_id][int(counts[label_id])] = image
                 counts[label_id] += 1
 
