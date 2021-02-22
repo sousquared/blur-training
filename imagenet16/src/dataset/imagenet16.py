@@ -7,6 +7,33 @@ from robustness.tools.imagenet_helpers import common_superclass_wnid, ImageNetHi
 
 current_dir = pathlib.Path(os.path.abspath(__file__)).parent
 
+num_classes = 16
+num_channels = 3
+height = 224
+width = 224
+
+categories = sorted(
+    [
+        "knife",
+        "keyboard",
+        "elephant",
+        "bicycle",
+        "airplane",
+        "clock",
+        "oven",
+        "chair",
+        "bear",
+        "boat",
+        "cat",
+        "bottle",
+        "truck",
+        "car",
+        "bird",
+        "dog",
+    ]
+)
+label_map = {k: v for k, v in enumerate(categories)}
+
 
 def load_data(
     batch_size: int,

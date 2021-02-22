@@ -10,3 +10,4 @@ __pycache__/
 # for analysis and noteboooks
 results/
 plots/
+test-images/

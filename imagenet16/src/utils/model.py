@@ -5,12 +5,16 @@ import torch.nn as nn
 import torchvision.models as models
 
 
-def load_model(arch, num_classes=16):
+def load_model(
+    arch: str, num_classes: int = 16, model_path: str = "", device: str = ""
+):
     """
     Load model from pytorch model zoo and change the number of final layser's units
     Args:
-        arch: name of architecture
-        num_classes: number of last layer's units
+        arch (str): name of architecture.
+        num_classes (int): number of last layer's units.
+        model_path (str): path to trained model's weights.
+        device (str): device for map_location for loading weights. (e.g. "cuda:0")
     Returns: model (torch.model)
     """
     model = models.__dict__[arch]()
@@ -37,6 +41,14 @@ def load_model(arch, num_classes=16):
             kernel_size=(1, 1),
             stride=(1, 1),
         )
+
+    # load trained weights.
+    if model_path:
+        if device:
+            checkpoint = torch.load(model_path, map_location=device)
+        else:
+            checkpoint = torch.load(model_path)
+        model.load_state_dict(checkpoint["state_dict"])
 
     return model
 
