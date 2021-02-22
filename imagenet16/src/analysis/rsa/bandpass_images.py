@@ -8,7 +8,7 @@ import torch
 
 # add a path to load src module
 current_dir = pathlib.Path(os.path.abspath(__file__)).parent
-sys.path.append(str(current_dir) + "/../../../")
+sys.path.append(os.path.join(str(current_dir), "../../../"))
 
 from src.dataset.imagenet16 import load_data, num_classes, num_channels, height, width
 from src.images.bandpass import apply_bandpass_filter
