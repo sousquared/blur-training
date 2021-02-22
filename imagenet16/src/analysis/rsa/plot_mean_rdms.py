@@ -81,6 +81,7 @@ def plot_rdms(in_dir, model_name, epoch, out_dir):
     )
     plt.savefig(os.path.join(out_dir, filename))
     # plt.show()
+    plt.close()
 
 
 if __name__ == "__main__":
