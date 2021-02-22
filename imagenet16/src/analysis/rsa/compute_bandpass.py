@@ -73,6 +73,7 @@ def main(
     models_dir: str = "/mnt/work/blur-training/imagenet16/logs/models/",  # model directory
     out_dir: str = "./results/alexnet_bandpass",
     test_images_dir: str = "./test-images",  # directory for test images overview file
+    save_test_images: bool = False,
     target_id: int = 1,  # bear
     num_filters: int = 6,  # number of band-pass filters
     num_images: int = 10,  # number of images for each class.
@@ -103,8 +104,7 @@ def main(
     ).to(device)
 
     # save test images (if needed)
-    save_image = False
-    if save_image:
+    if save_test_images:
         image_name = f"bandpass_{label_map[target_id]}_n{num_images}.png"
         imsave(
             torchvision.utils.make_grid(
@@ -138,9 +138,11 @@ if __name__ == "__main__":
     main(
         arch=arch,
         model_names=model_names,
+        epoch=60,
         models_dir="/mnt/work/blur-training/imagenet16/logs/models/",  # model directory
         out_dir=f"./results/{arch}_bandpass",
         test_images_dir="./test-images",  # directory for test images overview file
+        save_test_images=False,
         target_id=1,  # bear
         num_filters=6,  # number of band-pass filters
         num_images=10,  # number of images for each class.
