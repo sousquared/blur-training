@@ -105,7 +105,7 @@ def main(
     # save test images (if needed)
     save_image = False
     if save_image:
-        image_name = f"bandpass_all_comb_filters_{label_map[target_id]}_n{num_images}.png"
+        image_name = f"bandpass_{label_map[target_id]}_n{num_images}.png"
         imsave(
             torchvision.utils.make_grid(
                 test_images.reshape(-1, *test_images.shape[2:]).cpu(),
