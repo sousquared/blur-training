@@ -3,7 +3,7 @@ from typing import Dict, Optional, List
 
 import torch
 
-from .lowpass import GaussianBlurAll
+from .lowpass_filter import GaussianBlurAll
 
 
 def apply_bandpass_filter(images: torch.Tensor, s1: float, s2: float) -> torch.Tensor:

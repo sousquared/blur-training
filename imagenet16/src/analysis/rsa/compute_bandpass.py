@@ -14,7 +14,7 @@ sys.path.append(os.path.join(str(current_dir), "../../../"))
 from src.utils.model import load_model
 from src.utils.image import imsave
 from src.analysis.rsa.rdm import AlexNetRDM
-from src.analysis.rsa.bandpass_images import make_bandpass_images
+from src.image_process.bandpass_images import make_bandpass_images
 from src.dataset.imagenet16 import label_map
 
 

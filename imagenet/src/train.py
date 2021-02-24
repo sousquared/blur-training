@@ -23,7 +23,7 @@ from torchvision import models
 current_dir = pathlib.Path(os.path.abspath(__file__)).parent
 sys.path.append(str(current_dir) + "/../")
 
-from src.images.lowpass import GaussianBlurAll, RandomGaussianBlurAll
+from src.image_process.lowpass_filter import GaussianBlurAll, RandomGaussianBlurAll
 from src.utils.model import save_model, save_checkpoint
 from src.utils.adjust import (
     adjust_learning_rate,
