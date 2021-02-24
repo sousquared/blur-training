@@ -8,8 +8,17 @@ import torch
 current_dir = pathlib.Path(os.path.abspath(__file__)).parent
 sys.path.append(os.path.join(str(current_dir), "../../../"))
 
-from src.dataset.imagenet16 import make_test_images_by_class, num_channels, height, width
-from src.images.bandpass import apply_bandpass_filter, make_bandpass_filters, make_filter_combinations
+from src.dataset.imagenet16 import (
+    make_test_images_by_class,
+    num_channels,
+    height,
+    width,
+)
+from src.images.bandpass import (
+    apply_bandpass_filter,
+    make_bandpass_filters,
+    make_filter_combinations,
+)
 
 
 def make_bandpass_images(
