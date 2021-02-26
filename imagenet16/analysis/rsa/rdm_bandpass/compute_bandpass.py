@@ -4,7 +4,7 @@ import sys
 
 # add the path to load src module
 current_dir = pathlib.Path(os.path.abspath(__file__)).parent
-sys.path.append(str(current_dir) + "/../../")
+sys.path.append(str(current_dir) + "/../../../")
 
 from src.analysis.rsa.compute_bandpass import main
 
@@ -13,6 +13,12 @@ if __name__ == "__main__":
     # arguments
     arch = "alexnet"
     epoch = 60
+
+    all_filter_combinations = False
+    if all_filter_combinations:
+        out_dir = f"./results/{arch}_bandpass_all_filter_comb/mean_rdms"
+    else:
+        out_dir = f"./results/{arch}_bandpass/mean_rdms"
 
     # models to compare
     modes = [
@@ -49,7 +55,8 @@ if __name__ == "__main__":
         arch=arch,
         model_names=model_names,
         models_dir="/mnt/work/blur-training/imagenet16/logs/models/",  # model directory
-        out_dir=f"./results/{arch}_bandpass",
+        out_dir=out_dir,
+        all_filter_combinations=all_filter_combinations,
         test_images_dir="./test-images",  # directory for test images overview file
         save_test_images=False,
         target_id=1,  # bear

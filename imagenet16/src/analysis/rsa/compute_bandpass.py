@@ -14,7 +14,7 @@ sys.path.append(os.path.join(str(current_dir), "../../../"))
 from src.utils.model import load_model
 from src.utils.image import imsave
 from src.analysis.rsa.rdm import AlexNetRDM
-from src.image_process.bandpass_images import make_bandpass_images
+from src.image_process.bandpass_images import make_bandpass_images, make_bandpass_images_all_comb
 from src.dataset.imagenet16 import label_map
 
 
@@ -72,6 +72,7 @@ def main(
     epoch: int = 60,
     models_dir: str = "/mnt/work/blur-training/imagenet16/logs/models/",  # model directory
     out_dir: str = "./results/alexnet_bandpass",
+    all_filter_combinations: bool = False,
     test_images_dir: str = "./test-images",  # directory for test images overview file
     save_test_images: bool = False,
     target_id: int = 1,  # bear
@@ -99,9 +100,14 @@ def main(
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     # load and make test images
-    test_images = make_bandpass_images(
-        target_id=target_id, num_filters=num_filters, num_images=num_images
-    ).to(device)
+    if all_filter_combinations:
+        test_images = make_bandpass_images_all_comb(
+            target_id=target_id, num_filters=num_filters, num_images=num_images
+        ).to(device)
+    else:
+        test_images = make_bandpass_images(
+            target_id=target_id, num_filters=num_filters, num_images=num_images
+        ).to(device)
 
     # save test images (if needed)
     if save_test_images:
@@ -135,12 +141,19 @@ if __name__ == "__main__":
     mode = "normal"
     model_names = [f"{arch}_{mode}"]
 
+    all_filter_combinations = False
+    if all_filter_combinations:
+        out_dir = f"./results/{arch}_bandpass_all_filter_comb/mean_rdms"
+    else:
+        out_dir = f"./results/{arch}_bandpass/mean_rdms"
+
     main(
         arch=arch,
         model_names=model_names,
         epoch=60,
         models_dir="/mnt/work/blur-training/imagenet16/logs/models/",  # model directory
-        out_dir=f"./results/{arch}_bandpass",
+        out_dir=out_dir,
+        all_filter_combinations=all_filter_combinations,
         test_images_dir="./test-images",  # directory for test images overview file
         save_test_images=False,
         target_id=1,  # bear
