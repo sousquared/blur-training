@@ -37,24 +37,23 @@ def analyze(
     model_path = os.path.join(models_dir, model_name, f"epoch_{epoch:02d}.pth.tar")
     model = load_model(arch=arch, model_path=model_path).to(device)
 
-    mean_rdms = compute_activations(model=model, test_images=test_images)
+    activations = compute_activations(model=model, test_images=test_images)
+    # print(activations["conv-relu-1"].shape)  # torch.Size([10, 64, 55, 55])
 
-    # add parameter settings of this analysis
-    mean_rdms["target_id"] = target_id
-    mean_rdms["num_filters"] = num_filters
-    mean_rdms["num_images"] = num_images
+    # # add parameter settings of this analysis
+    # mean_rdms["target_id"] = target_id
+    # mean_rdms["num_filters"] = num_filters
+    # mean_rdms["num_images"] = num_images
 
     save_activations(
-        mean_rdms=mean_rdms, out_dir=out_dir, model_name=model_name, epoch=epoch
+        activations=activations, out_dir=out_dir, model_name=model_name, epoch=epoch
     )
 
 
 def compute_activations(model, test_images) -> dict:
     """Computes and save mean RDMs.
     Args:
-        test_images: images to test the model with. shape=(N, F+1, C, H, W)
-            Where: F is the number of filters.
-                F+1 means filter applied images(F) and a raw image(+1)
+        test_images: images to test the model with. shape=(N, C, H, W)
     """
     RDM = AlexNetRDM(model)
     activations = RDM.compute_activations(test_images)
@@ -62,12 +61,12 @@ def compute_activations(model, test_images) -> dict:
     return activations
 
 
-def save_activations(mean_rdms: dict, out_dir: str, model_name: str, epoch: int):
+def save_activations(activations: dict, out_dir: str, model_name: str, epoch: int):
     # save dict object
     file_name = model_name + f"_e{epoch:02d}.pkl"
     file_path = os.path.join(out_dir, file_name)
     with open(file_path, "wb") as f:
-        pickle.dump(mean_rdms, f)
+        pickle.dump(activations, f)
 
 
 def main(
@@ -89,7 +88,7 @@ def main(
     assert os.path.exists(models_dir), f"{models_dir} does not exist."
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
-    if not os.path.exists(test_images_dir):
+    if save_test_images and not os.path.exists(test_images_dir):
         os.makedirs(test_images_dir)
 
     # data settings
@@ -141,12 +140,13 @@ if __name__ == "__main__":
     arch = "alexnet"
     mode = "normal"
     model_names = [f"{arch}_{mode}"]
+    out_dir = f"./results/{arch}/activations"
 
     all_filter_combinations = False
-    if all_filter_combinations:
-        out_dir = f"./results/{arch}_bandpass_all_filter_comb/activations"
-    else:
-        out_dir = f"./results/{arch}_bandpass/activations"
+    # if all_filter_combinations:
+    #     out_dir = f"./results/{arch}_bandpass_all_filter_comb/activations"
+    # else:
+    #     out_dir = f"./results/{arch}_bandpass/activations"
 
     main(
         arch=arch,
