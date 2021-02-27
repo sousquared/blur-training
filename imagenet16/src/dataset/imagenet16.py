@@ -1,7 +1,9 @@
 import os
 import pathlib
 
+import torch
 import torchvision.transforms as transforms
+
 from robustness import datasets
 from robustness.tools.imagenet_helpers import common_superclass_wnid, ImageNetHierarchy
 
@@ -75,3 +77,25 @@ def load_data(
     )
 
     return train_loader, test_loader
+
+
+def make_test_images_by_class(num_images: int = 10) -> torch.Tensor:
+    """Makes test images along class labels.
+    Args:
+        num_images (int): number of images for each class. Default: 10
+
+    Returns: test images (num_classes, N, C, H, W)
+        where: num_classes = 16
+    """
+    _, test_loader = load_data(batch_size=32)
+
+    counts = torch.zeros(num_classes)
+    test_images = torch.zeros([num_classes, num_images, num_channels, height, width])
+    for images, labels in test_loader:
+        for image, label in zip(images, labels):
+            label_id = label.item()
+            if counts[label_id] < num_images:
+                test_images[label_id][int(counts[label_id])] = image
+                counts[label_id] += 1
+
+    return test_images

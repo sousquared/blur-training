@@ -16,7 +16,7 @@ from torch.utils.tensorboard import SummaryWriter
 current_dir = pathlib.Path(os.path.abspath(__file__)).parent
 sys.path.append(str(current_dir) + "/../")
 
-from src.images.lowpass import GaussianBlurAll, RandomGaussianBlurAll
+from src.image_process.lowpass_filter import GaussianBlurAll, RandomGaussianBlurAll
 from src.dataset.imagenet16 import load_data
 from src.utils.model import load_model, save_model
 from src.utils.adjust import (
