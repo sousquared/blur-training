@@ -91,8 +91,8 @@ class AlexNetRDM:
                 # shape of imgs == (F+1, C, H, W)
                 # where F is the number of band-pass filters.
                 # F+1 means band-pass filters(F) and raw image(+1)
-                activations = self.compute_activations(imgs)
-                activation = activations[layer].view(num_filters + 1, -1).cpu().numpy()
+                self.activations = self.compute_activations(imgs)
+                activation = self.activations[layer].view(num_filters + 1, -1).cpu().numpy()
                 rdm = squareform(pdist(activation, metric="correlation"))
                 rdms.append(rdm)
 
