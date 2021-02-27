@@ -31,7 +31,7 @@ cudnn.benchmark = True
 
 
 def load_data(
-        batch_size, in_path="/mnt/data/ImageNet/ILSVRC2012/", in_info_path="../info/"
+    batch_size, in_path="/mnt/data/ImageNet/ILSVRC2012/", in_info_path="../info/"
 ):
     """
     load 16-class-ImageNet
@@ -84,17 +84,17 @@ def load_model(model_path, arch, num_classes=16):
     # change the number of last layer's units
     model = models.__dict__[arch]()
     if (
-            arch.startswith("alexnet")
-            or arch.startswith("vgg")
-            or arch.startswith("mnasnet")
-            or arch.startswith("mobilenet")
+        arch.startswith("alexnet")
+        or arch.startswith("vgg")
+        or arch.startswith("mnasnet")
+        or arch.startswith("mobilenet")
     ):
         model.classifier[-1] = nn.Linear(model.classifier[-1].in_features, num_classes)
     elif (
-            arch.startswith("resne")
-            or arch.startswith("shufflenet")
-            or arch.startswith("inception")
-            or arch.startswith("wide_resnet")
+        arch.startswith("resne")
+        or arch.startswith("shufflenet")
+        or arch.startswith("inception")
+        or arch.startswith("wide_resnet")
     ):
         model.fc = nn.Linear(model.fc.in_features, num_classes)
     elif arch.startswith("densenet"):

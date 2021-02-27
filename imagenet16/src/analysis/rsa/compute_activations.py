@@ -15,7 +15,10 @@ from src.utils.model import load_model
 from src.utils.image import imsave
 from src.analysis.rsa.rdm import AlexNetRDM
 from src.dataset.imagenet16 import make_test_images_by_class
-from src.image_process.bandpass_images import make_bandpass_images, make_bandpass_images_all_comb
+from src.image_process.bandpass_images import (
+    make_bandpass_images,
+    make_bandpass_images_all_comb,
+)
 from src.dataset.imagenet16 import label_map
 
 
