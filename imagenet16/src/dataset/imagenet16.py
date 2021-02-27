@@ -39,27 +39,27 @@ label_map = {k: v for k, v in enumerate(categories)}
 
 def load_data(
     batch_size: int,
-    in_path: str = "/mnt/data/ImageNet/ILSVRC2012/",
-    in_info_path: str = str(current_dir) + "/info/",
+    dataset_path: str = "/mnt/data/ImageNet/ILSVRC2012/",
+    info_path: str = str(current_dir) + "/info/",
     normalize: bool = True,
 ):
     """
     load 16-class-ImageNet
     Arguments:
         batch_size (int): the batch size used in training and test
-        in_path (str): the path to ImageNet
-        in_info_path (str): the path to the directory that contains
+        dataset_path (str): the path to ImageNet
+        info_path (str): the path to the directory that contains
                     imagenet_class_index.json, wordnet.is_a.txt, words.txt
         normalize (bool): Use normalization on images or nor. (default: True)
     Returns: train_loader, test_loader
     """
 
     # 16-class-imagenet
-    in_hier = ImageNetHierarchy(in_path, in_info_path)
+    in_hier = ImageNetHierarchy(dataset_path, info_path)
     superclass_wnid = common_superclass_wnid("geirhos_16")
     class_ranges, label_map = in_hier.get_subclasses(superclass_wnid, balanced=True)
 
-    custom_dataset = datasets.CustomImageNet(in_path, class_ranges)
+    custom_dataset = datasets.CustomImageNet(dataset_path, class_ranges)
     # data augumentation for imagenet in robustness library is:
     # https://github.com/MadryLab/robustness/blob/master/robustness/data_augmentation.py
 
@@ -79,7 +79,9 @@ def load_data(
     return train_loader, test_loader
 
 
-def make_test_images_by_class(num_images: int = 10) -> torch.Tensor:
+def make_test_images_by_class(
+    dataset_path: str = "/mnt/data/ImageNet/ILSVRC2012/", num_images: int = 10
+) -> torch.Tensor:
     """Makes test images along class labels.
     Args:
         num_images (int): number of images for each class. Default: 10
@@ -87,7 +89,7 @@ def make_test_images_by_class(num_images: int = 10) -> torch.Tensor:
     Returns: test images (num_classes, N, C, H, W)
         where: num_classes = 16
     """
-    _, test_loader = load_data(batch_size=32)
+    _, test_loader = load_data(dataset_path=dataset_path, batch_size=32)
 
     counts = torch.zeros(num_classes)
     test_images = torch.zeros([num_classes, num_images, num_channels, height, width])

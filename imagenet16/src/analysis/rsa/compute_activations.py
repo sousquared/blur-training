@@ -104,7 +104,9 @@ def main(
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     # load and make test images
-    test_images = make_test_images_by_class(num_images=num_images).to(device)
+    test_images = make_test_images_by_class(
+        dataset_path="/mnt/data1/ImageNet/ILSVRC2012/", num_images=num_images
+    ).to(device)
     # choose one class
     test_images = test_images[target_id]  # (N, C, H, W)
 
