@@ -37,36 +37,21 @@ def analyze(
     model_path = os.path.join(models_dir, model_name, f"epoch_{epoch:02d}.pth.tar")
     model = load_model(arch=arch, model_path=model_path).to(device)
 
-    activations = compute_activations(model=model, test_images=test_images)
-    # print(activations["conv-relu-1"].shape)  # torch.Size([10, 64, 55, 55])
-
-    # # add parameter settings of this analysis
-    # mean_rdms["target_id"] = target_id
-    # mean_rdms["num_filters"] = num_filters
-    # mean_rdms["num_images"] = num_images
-
-    save_activations(
-        activations=activations, out_dir=out_dir, model_name=model_name, epoch=epoch
-    )
-
-
-def compute_activations(model, test_images) -> dict:
-    """Computes and save mean RDMs.
-    Args:
-        test_images: images to test the model with. shape=(N, C, H, W)
-    """
     RDM = AlexNetRDM(model)
-    activations = RDM.compute_activations(test_images)
 
-    return activations
+    for n in range(num_images):
+        activations = RDM.compute_activations(test_images[n])
+        # print(activations["conv-relu-1"].shape)  # torch.Size([F+1, 64, 55, 55])
 
+        # add parameter settings of this analysis
+        activations["target_id"] = target_id
+        activations["num_filters"] = num_filters
 
-def save_activations(activations: dict, out_dir: str, model_name: str, epoch: int):
-    # save dict object
-    file_name = model_name + f"_e{epoch:02d}.pkl"
-    file_path = os.path.join(out_dir, file_name)
-    with open(file_path, "wb") as f:
-        pickle.dump(activations, f)
+        # save
+        file_name = f"{model_name}_e{epoch:02d}_f{num_filters:02d}_n{n:03d}.pkl"
+        file_path = os.path.join(out_dir, file_name)
+        with open(file_path, "wb") as f:
+            pickle.dump(activations, f)
 
 
 def main(
@@ -75,6 +60,7 @@ def main(
     epoch: int = 60,
     models_dir: str = "/mnt/work/blur-training/imagenet16/logs/models/",  # model directory
     out_dir: str = "./results/alexnet_bandpass/activations",
+    dataset_path="/mnt/data1/ImageNet/ILSVRC2012/",
     all_filter_combinations: bool = False,
     test_images_dir: str = "./test-images",  # directory for test images overview file
     save_test_images: bool = False,
@@ -103,11 +89,16 @@ def main(
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     # load and make test images
-    test_images = make_test_images_by_class(
-        dataset_path="/mnt/data1/ImageNet/ILSVRC2012/", num_images=num_images
-    ).to(device)
-    # choose one class
-    test_images = test_images[target_id]  # (N, C, H, W)
+    if all_filter_combinations:
+        test_images = make_bandpass_images_all_comb(
+            dataset_path=dataset_path,
+            target_id=target_id, num_filters=num_filters, num_images=num_images
+        ).to(device)
+    else:
+        test_images = make_bandpass_images(
+            dataset_path=dataset_path,
+            target_id=target_id, num_filters=num_filters, num_images=num_images
+        ).to(device)  # (N, F+1, C, H, W)
 
     # save test images (if needed)
     if save_test_images:
@@ -154,6 +145,7 @@ if __name__ == "__main__":
         epoch=60,
         models_dir="/mnt/work/blur-training/imagenet16/logs/models/",  # model directory
         out_dir=out_dir,
+        dataset_path="/mnt/data1/ImageNet/ILSVRC2012/",
         all_filter_combinations=all_filter_combinations,
         test_images_dir="./test-images",  # directory for test images overview file
         save_test_images=False,

@@ -59,6 +59,7 @@ if __name__ == "__main__":
         model_names=model_names,
         models_dir=models_dir,  # model directory
         out_dir=out_dir,
+        dataset_path="/mnt/data1/ImageNet/ILSVRC2012/",
         all_filter_combinations=all_filter_combinations,
         test_images_dir=test_images_dir,  # directory for test images overview file
         save_test_images=save_test_images,

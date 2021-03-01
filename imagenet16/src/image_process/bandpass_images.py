@@ -22,12 +22,14 @@ from src.image_process.bandpass_filter import (
 
 
 def make_bandpass_images(
+    dataset_path: str = "/mnt/data/ImageNet/ILSVRC2012/",
     target_id: int = 1,
     num_filters: int = 6,
     num_images: int = 10,
 ) -> torch.Tensor:
     """Makes band-passed test images (1 class).
     Arguments:
+        dataset_path: path to ImageNet
         target_id (int): label id of the target category. Default: 1
         num_filters (int): number of band-pass filters.
         num_images (int): number of images for each class. Default: 10
@@ -37,7 +39,9 @@ def make_bandpass_images(
             where: num_classes = 16
     """
     # choose one class as test images
-    raw_images = make_test_images_by_class(num_images=num_images)
+    raw_images = make_test_images_by_class(
+        dataset_path=dataset_path, num_images=num_images
+    )
     # choose one class
     raw_images = raw_images[target_id]  # (N, C, H, W)
 
@@ -60,12 +64,14 @@ def make_bandpass_images(
 
 
 def make_bandpass_images_all_comb(
+    dataset_path: str = "/mnt/data/ImageNet/ILSVRC2012/",
     target_id: int = 1,
     num_filters: int = 6,
     num_images: int = 10,
 ) -> torch.Tensor:
     """Makes band-passed test images (1 class) with all combinations of band-pass filters.
     Arguments:
+        dataset_path: path to ImageNet
         target_id (int): label id of the target category. Default: 1
         num_filters (int): number of band-pass filters.
         num_images (int): number of images for each class. Default: 10
@@ -75,7 +81,9 @@ def make_bandpass_images_all_comb(
             where: num_classes = 16
     """
     # choose one class as test images
-    raw_images = make_test_images_by_class(num_images=num_images)
+    raw_images = make_test_images_by_class(
+        dataset_path=dataset_path, num_images=num_images
+    )
     # choose one class
     raw_images = raw_images[target_id]  # (N, C, H, W)
 
