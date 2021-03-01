@@ -48,7 +48,7 @@ def analyze(
         activations["num_filters"] = num_filters
 
         # save
-        file_name = f"{model_name}_e{epoch:02d}_f{num_filters:02d}_n{n:03d}.pkl"
+        file_name = f"{model_name}_e{epoch:02d}_label{target_id:02d}_f{num_filters:02d}_n{n:03d}.pkl"
         file_path = os.path.join(out_dir, file_name)
         with open(file_path, "wb") as f:
             pickle.dump(activations, f)
@@ -92,13 +92,19 @@ def main(
     if all_filter_combinations:
         test_images = make_bandpass_images_all_comb(
             dataset_path=dataset_path,
-            target_id=target_id, num_filters=num_filters, num_images=num_images
+            target_id=target_id,
+            num_filters=num_filters,
+            num_images=num_images,
         ).to(device)
     else:
         test_images = make_bandpass_images(
             dataset_path=dataset_path,
-            target_id=target_id, num_filters=num_filters, num_images=num_images
-        ).to(device)  # (N, F+1, C, H, W)
+            target_id=target_id,
+            num_filters=num_filters,
+            num_images=num_images,
+        ).to(
+            device
+        )  # (N, F+1, C, H, W)
 
     # save test images (if needed)
     if save_test_images:
