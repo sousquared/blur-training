@@ -56,7 +56,7 @@ class AlexNetRDM:
     #  https://discuss.pytorch.org/t/extract-features-from-layer-of-submodule-of-a-model/20181
     def _get_activations(self, name):
         def hook(model, input, output):
-            self.activations[name] = output.detach()
+            self.activations[name] = output.detach().cpu().numpy()
 
         return hook
 
@@ -92,9 +92,7 @@ class AlexNetRDM:
                 # where F is the number of band-pass filters.
                 # F+1 means band-pass filters(F) and raw image(+1)
                 self.activations = self.compute_activations(imgs)
-                activation = (
-                    self.activations[layer].view(num_filters + 1, -1).cpu().numpy()
-                )
+                activation = self.activations[layer].reshape(num_filters + 1, -1)
                 rdm = squareform(pdist(activation, metric="correlation"))
                 rdms.append(rdm)
 
