@@ -48,7 +48,7 @@ def analyze(
         activations["num_filters"] = num_filters
 
         # save
-        file_name = f"{model_name}_e{epoch:02d}_label{target_id:02d}_f{num_filters:02d}_n{n:03d}.pkl"
+        file_name = f"{model_name}_e{epoch:02d}_l{target_id:02d}_f{num_filters:02d}_n{n:03d}.pkl"
         file_path = os.path.join(out_dir, file_name)
         with open(file_path, "wb") as f:
             pickle.dump(activations, f)
