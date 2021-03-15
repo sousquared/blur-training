@@ -98,8 +98,6 @@ class AlexNetRDM:
 
             rdms = np.array(rdms)
 
-            mean_rdm = rdms.mean(0)
-
-            mean_rdms[layer] = mean_rdm
+            mean_rdms[layer] = rdms.mean(0)
 
         return mean_rdms
