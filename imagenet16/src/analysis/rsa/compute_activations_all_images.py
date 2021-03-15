@@ -99,7 +99,7 @@ def analyze(
             test_images[i] = apply_bandpass_filter(images=image, s1=s1, s2=s2)
 
         # change the order of num_images and num_filters(+1)
-        test_images.transpose(1, 0)  # (1, F+1, C, H, W)
+        test_images = test_images.transpose(1, 0)  # (1, F+1, C, H, W)
 
         activations = RDM.compute_activations(test_images[0].to(device))
         # print(activations["conv-relu-1"].shape)  # torch.Size([F+1, 64, 55, 55])
@@ -109,7 +109,7 @@ def analyze(
         activations["num_filters"] = len(filters)
 
         # save
-        file_name = f"image{image_id:04d}_l{label.item():02d}_f{len(filters):02d}.pkl"
+        file_name = f"image{image_id:04d}_f{len(filters):02d}.pkl"
         file_path = os.path.join(out_model_dir, file_name)
         with open(file_path, "wb") as f:
             pickle.dump(activations, f)
