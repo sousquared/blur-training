@@ -18,7 +18,10 @@ from src.dataset.imagenet16 import (
     height,
     width,
 )
-from src.image_process.bandpass_filter import make_bandpass_filters, apply_bandpass_filter
+from src.image_process.bandpass_filter import (
+    make_bandpass_filters,
+    apply_bandpass_filter,
+)
 
 
 def main(
@@ -91,9 +94,7 @@ def analyze(
         label (torch.Tensor): e.g. tensor([0])
         """
         # make bandpass images
-        test_images = torch.zeros(
-            [len(filters) + 1, 1, num_channels, height, width]
-        )
+        test_images = torch.zeros([len(filters) + 1, 1, num_channels, height, width])
         test_images[0] = image  # add raw images
         for i, (s1, s2) in enumerate(filters.values(), 1):
             test_images[i] = apply_bandpass_filter(images=image, s1=s1, s2=s2)
