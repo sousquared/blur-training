@@ -13,7 +13,7 @@ if __name__ == "__main__":
     arch = "alexnet"
     epoch = 60
     models_dir = "/home/sou/work/blur-training/imagenet16/logs/models/"
-    out_dir = f"./results/activations/{arch}/"
+    out_dir = f"./results/activations_single_label/{arch}/"
     test_images_dir = "./test-images"
     save_test_images = False
 
