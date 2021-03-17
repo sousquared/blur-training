@@ -4,9 +4,9 @@ import sys
 
 # add the path to load src module
 current_dir = pathlib.Path(os.path.abspath(__file__)).parent
-sys.path.append(str(current_dir) + "/../../../")
+sys.path.append(str(current_dir) + "/../../../../")
 
-from src.analysis.rsa.compute_activations_all_images import main
+from src.analysis.rsa.bandpass.compute_activations import main
 
 if __name__ == "__main__":
     # arguments

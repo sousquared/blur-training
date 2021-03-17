@@ -9,7 +9,7 @@ import torchvision
 
 # add the path to load src module
 current_dir = pathlib.Path(os.path.abspath(__file__)).parent
-sys.path.append(os.path.join(str(current_dir), "../../../"))
+sys.path.append(os.path.join(str(current_dir), "../../../../"))
 
 from src.utils.model import load_model
 from src.utils.image import imsave

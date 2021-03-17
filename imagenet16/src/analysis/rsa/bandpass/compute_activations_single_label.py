@@ -9,12 +9,11 @@ import torchvision
 
 # add the path to load src module
 current_dir = pathlib.Path(os.path.abspath(__file__)).parent
-sys.path.append(os.path.join(str(current_dir), "../../../"))
+sys.path.append(os.path.join(str(current_dir), "../../../../"))
 
 from src.utils.model import load_model
 from src.utils.image import imsave
 from src.analysis.rsa.rdm import AlexNetRDM
-from src.dataset.imagenet16 import make_test_images_by_class
 from src.image_process.bandpass_images import (
     make_bandpass_images,
     make_bandpass_images_all_comb,
