@@ -11,7 +11,7 @@ current_dir = pathlib.Path(os.path.abspath(__file__)).parent
 sys.path.append(os.path.join(str(current_dir), "../../../"))
 
 from src.analysis.rsa.rdm import alexnet_layers
-from src.dataset.imagenet16 import label_map
+# from src.dataset.imagenet16 import label_map
 
 
 def load_rdms(in_dir, model_name, epoch):
@@ -30,7 +30,12 @@ def plot_rdms(in_dir, model_name, epoch, out_dir):
     # get analysis parameters.
     num_images = mean_rdms["num_images"]
     num_filters = mean_rdms["num_filters"]
-    target_id = mean_rdms["target_id"]
+    # target_id = mean_rdms["target_id"]  # it's not included when testing models with all images.
+
+    # set filename
+    filename = "mean-rdms_{}_e{}_f{}_n{}.png".format(
+        model_name, epoch, num_filters, num_images
+    )  # add "target_id" if you need it.
 
     fig = plt.figure(dpi=300)
     for i, layer in enumerate(alexnet_layers):
@@ -76,9 +81,6 @@ def plot_rdms(in_dir, model_name, epoch, out_dir):
     fig.suptitle(title)
     # fig.tight_layout(rect=[0, 0, .9, 1])
     fig.tight_layout()
-    filename = "mean-rdms_{}_e{}_{}_f{}_n{}.png".format(
-        model_name, epoch, label_map[target_id], num_images, num_images
-    )
     plt.savefig(os.path.join(out_dir, filename))
     # plt.show()
     plt.close()
