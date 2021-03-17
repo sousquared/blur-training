@@ -24,13 +24,13 @@ if __name__ == "__main__":
     # models to compare
     modes = [
         "normal",
-        # "all",
-        # "mix",
-        # "random-mix",
-        # "single-step",
-        # "fixed-single-step",
-        # "reversed-single-step",
-        # "multi-steps",
+        "all",
+        "mix",
+        "random-mix",
+        "single-step",
+        "fixed-single-step",
+        "reversed-single-step",
+        "multi-steps",
     ]
 
     # sigmas to compare
