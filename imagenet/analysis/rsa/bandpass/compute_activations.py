@@ -54,6 +54,7 @@ if __name__ == "__main__":
 
     main(
         arch=arch,
+        num_classes=1000,
         model_names=model_names,
         models_dir=models_dir,  # model directory
         out_dir=out_dir,
