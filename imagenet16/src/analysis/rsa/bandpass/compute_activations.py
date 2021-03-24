@@ -26,6 +26,7 @@ from src.image_process.bandpass_filter import (
 
 def main(
     arch: str = "alexnet",
+    num_classes: int = 16,
     model_names: list = ["alexnet_normal"],
     epoch: int = 60,
     models_dir: str = "/mnt/work/blur-training/imagenet16/logs/models/",  # model directory
@@ -61,6 +62,7 @@ def main(
         analyze(
             models_dir=models_dir,
             arch=arch,
+            num_class=num_classes,
             model_name=model_name,
             epoch=epoch,
             device=device,
@@ -73,6 +75,7 @@ def main(
 def analyze(
     models_dir: str,
     arch: str,
+    num_classes: int,
     model_name: str,
     epoch: int,
     device: torch.device,
@@ -81,7 +84,7 @@ def analyze(
     out_dir: str,
 ):
     model_path = os.path.join(models_dir, model_name, f"epoch_{epoch:02d}.pth.tar")
-    model = load_model(arch=arch, model_path=model_path).to(device)
+    model = load_model(arch=arch, num_classes=num_classes,model_path=model_path).to(device)
 
     out_model_dir = os.path.join(out_dir, f"{model_name}_e{epoch:02d}")
     os.makedirs(out_model_dir, exist_ok=True)
@@ -130,6 +133,7 @@ if __name__ == "__main__":
 
     main(
         arch=arch,
+        num_classes=16,
         model_names=model_names,
         epoch=60,
         models_dir="/mnt/work/blur-training/imagenet16/logs/models/",  # model directory
