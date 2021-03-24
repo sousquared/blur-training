@@ -62,7 +62,7 @@ def main(
         analyze(
             models_dir=models_dir,
             arch=arch,
-            num_class=num_classes,
+            num_classes=num_classes,
             model_name=model_name,
             epoch=epoch,
             device=device,
