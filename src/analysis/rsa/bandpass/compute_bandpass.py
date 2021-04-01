@@ -9,7 +9,7 @@ import torchvision
 
 # add the path to load src module
 current_dir = pathlib.Path(os.path.abspath(__file__)).parent
-sys.path.append(os.path.join(str(current_dir), "../../../../"))
+sys.path.append(os.path.join(str(current_dir), "../../../../imagenet16/"))
 
 from src.utils.model import load_model
 from src.utils.image import imsave
@@ -36,21 +36,37 @@ def analyze(
     model_path = os.path.join(models_dir, model_name, f"epoch_{epoch:02d}.pth.tar")
     model = load_model(arch=arch, model_path=model_path).to(device)
 
+    mean_rdms = compute_mean_rdms(model=model, test_images=test_images)
+
+    # add parameter settings of this analysis
+    mean_rdms["target_id"] = target_id
+    mean_rdms["num_filters"] = num_filters
+    mean_rdms["num_images"] = num_images
+
+    save_mean_rdms(
+        mean_rdms=mean_rdms, out_dir=out_dir, model_name=model_name, epoch=epoch
+    )
+
+
+def compute_mean_rdms(model, test_images) -> dict:
+    """Computes and save mean RDMs.
+    Args:
+        test_images: images to test the model with. shape=(N, F+1, C, H, W)
+            Where: F is the number of filters.
+                F+1 means filter applied images(F) and a raw image(+1)
+    """
     RDM = AlexNetRDM(model)
+    mean_rdms = RDM.compute_mean_rdms(test_images)
 
-    for n in range(num_images):
-        activations = RDM.compute_activations(test_images[n])
-        # print(activations["conv-relu-1"].shape)  # torch.Size([F+1, 64, 55, 55])
+    return mean_rdms
 
-        # add parameter settings of this analysis
-        activations["target_id"] = target_id
-        activations["num_filters"] = num_filters
 
-        # save
-        file_name = f"{model_name}_e{epoch:02d}_l{target_id:02d}_f{num_filters:02d}_n{n:03d}.pkl"
-        file_path = os.path.join(out_dir, file_name)
-        with open(file_path, "wb") as f:
-            pickle.dump(activations, f)
+def save_mean_rdms(mean_rdms: dict, out_dir: str, model_name: str, epoch: int):
+    # save dict object
+    file_name = model_name + f"_e{epoch:02d}.pkl"
+    file_path = os.path.join(out_dir, file_name)
+    with open(file_path, "wb") as f:
+        pickle.dump(mean_rdms, f)
 
 
 def main(
@@ -58,8 +74,7 @@ def main(
     model_names: list = ["alexnet_normal"],
     epoch: int = 60,
     models_dir: str = "/mnt/work/blur-training/imagenet16/logs/models/",  # model directory
-    out_dir: str = "./results/alexnet_bandpass/activations",
-    dataset_path="/mnt/data1/ImageNet/ILSVRC2012/",
+    out_dir: str = "./results/alexnet_bandpass",
     all_filter_combinations: bool = False,
     test_images_dir: str = "./test-images",  # directory for test images overview file
     save_test_images: bool = False,
@@ -73,7 +88,7 @@ def main(
     assert os.path.exists(models_dir), f"{models_dir} does not exist."
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
-    if save_test_images and not os.path.exists(test_images_dir):
+    if not os.path.exists(test_images_dir):
         os.makedirs(test_images_dir)
 
     # data settings
@@ -90,20 +105,12 @@ def main(
     # load and make test images
     if all_filter_combinations:
         test_images = make_bandpass_images_all_comb(
-            dataset_path=dataset_path,
-            target_id=target_id,
-            num_filters=num_filters,
-            num_images=num_images,
+            target_id=target_id, num_filters=num_filters, num_images=num_images
         ).to(device)
     else:
         test_images = make_bandpass_images(
-            dataset_path=dataset_path,
-            target_id=target_id,
-            num_filters=num_filters,
-            num_images=num_images,
-        ).to(
-            device
-        )  # (N, F+1, C, H, W)
+            target_id=target_id, num_filters=num_filters, num_images=num_images
+        ).to(device)
 
     # save test images (if needed)
     if save_test_images:
@@ -136,13 +143,12 @@ if __name__ == "__main__":
     arch = "alexnet"
     mode = "normal"
     model_names = [f"{arch}_{mode}"]
-    out_dir = f"./results/{arch}/activations"
 
     all_filter_combinations = False
-    # if all_filter_combinations:
-    #     out_dir = f"./results/{arch}_bandpass_all_filter_comb/activations"
-    # else:
-    #     out_dir = f"./results/{arch}_bandpass/activations"
+    if all_filter_combinations:
+        out_dir = f"./results/{arch}_bandpass_all_filter_comb/mean_rdms"
+    else:
+        out_dir = f"./results/{arch}_bandpass/mean_rdms"
 
     main(
         arch=arch,
@@ -150,7 +156,6 @@ if __name__ == "__main__":
         epoch=60,
         models_dir="/mnt/work/blur-training/imagenet16/logs/models/",  # model directory
         out_dir=out_dir,
-        dataset_path="/mnt/data1/ImageNet/ILSVRC2012/",
         all_filter_combinations=all_filter_combinations,
         test_images_dir="./test-images",  # directory for test images overview file
         save_test_images=False,
