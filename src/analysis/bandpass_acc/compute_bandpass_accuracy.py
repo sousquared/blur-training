@@ -1,21 +1,22 @@
 #!pip install robustness==1.1  # (or 1.1.post2)
 
 import os
+import pathlib
 import sys
 
-sys.path.append("../../")
 import numpy as np
 import pandas as pd
 import torch
-import torch.nn as nn
-import torchvision.models as models
-import torchvision.transforms as transforms
 import torch.backends.cudnn as cudnn
 
-from robustness import datasets
-from robustness.tools.imagenet_helpers import common_superclass_wnid, ImageNetHierarchy
+# add the path to load src module
+current_dir = pathlib.Path(os.path.abspath(__file__)).parent
+sys.path.append(os.path.join(str(current_dir), "../../../../"))
 
-from training.utils import GaussianBlurAll, AverageMeter, accuracy
+from src.image_process.lowpass_filter import GaussianBlurAll
+from src.utils.accuracy import AverageMeter, accuracy
+from src.utils.model import load_model
+from src.dataset.imagenet16 import load_data
 
 cudnn.benchmark = True
 
@@ -34,91 +35,6 @@ if torch.cuda.is_available():
     torch.cuda.manual_seed(seed)
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-# print(device)
-
-
-def load_data(
-    batch_size, in_path="/mnt/data/ImageNet/ILSVRC2012/", in_info_path="../../info/"
-):
-    """
-    load 16-class-ImageNet
-    :param batch_size: the batch size used in training and test
-    :param in_path: the path to ImageNet
-    :param in_info_path: the path to the directory
-                              that contains imagenet_class_index.json, wordnet.is_a.txt, words.txt
-    :return: train_loader, test_loader
-    """
-
-    in_hier = ImageNetHierarchy(in_path, in_info_path)
-    superclass_wnid = common_superclass_wnid("geirhos_16")  # 16-class-imagenet
-    class_ranges, label_map = in_hier.get_subclasses(superclass_wnid, balanced=True)
-
-    custom_dataset = datasets.CustomImageNet(in_path, class_ranges)
-    # data augumentation for imagenet in robustness library is:
-    # https://github.com/MadryLab/robustness/blob/master/robustness/data_augmentation.py
-
-    ### parameters for normalization: choose one of them if you want to use normalization #############
-    # normalize = transforms.Normalize(mean=[0.4717, 0.4499, 0.3837], std=[0.2600, 0.2516, 0.2575])
-    # https://github.com/MadryLab/robustness/blob/master/robustness/datasets.py
-
-    # If you want to use normalization parameters of ImageNet from pyrotch:
-    normalize = transforms.Normalize(
-        mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
-    )
-
-    # 16-class-imagenet
-    # normalize = transforms.Normalize(mean=[0.4677, 0.4377, 0.3986], std=[0.2769, 0.2724, 0.2821])
-    # normalize = transforms.Normalize(mean=[0.4759, 0.4459, 0.4066], std=[0.2768, 0.2723, 0.2827])
-    ############################################################################
-    # add normalization
-    custom_dataset.transform_train.transforms.append(normalize)
-    custom_dataset.transform_test.transforms.append(normalize)
-
-    # train_loader, test_loader = custom_dataset.make_loaders(workers=10,
-    #                                                         batch_size=batch_size)
-    train_loader, test_loader = custom_dataset.make_loaders(
-        workers=10, batch_size=batch_size, only_val=True
-    )
-
-    return train_loader, test_loader
-
-
-def load_model(model_path, arch, num_classes=16):
-    """
-    :param model_path: path to the pytorch saved file of the model you want to use
-    """
-    model = models.__dict__[arch]()
-    # change the number of last layer's units
-    model = models.__dict__[arch]()
-    if (
-        arch.startswith("alexnet")
-        or arch.startswith("vgg")
-        or arch.startswith("mnasnet")
-        or arch.startswith("mobilenet")
-    ):
-        model.classifier[-1] = nn.Linear(model.classifier[-1].in_features, num_classes)
-    elif (
-        arch.startswith("resne")
-        or arch.startswith("shufflenet")
-        or arch.startswith("inception")
-        or arch.startswith("wide_resnet")
-    ):
-        model.fc = nn.Linear(model.fc.in_features, num_classes)
-    elif arch.startswith("densenet"):
-        model.classifier = nn.Linear(model.classifier.in_features, num_classes)
-    elif arch.startswith("squeezenet"):
-        model.classifier[1] = nn.Conv2d(
-            model.classifier[1].in_channels,
-            num_classes,
-            kernel_size=(1, 1),
-            stride=(1, 1),
-        )
-
-    checkpoint = torch.load(model_path, map_location="cuda:0")
-    model.load_state_dict(checkpoint["state_dict"])
-
-    return model
-
 
 def calc_band_acc(model, sigma1=0, sigma2=0, raw=False):
     """

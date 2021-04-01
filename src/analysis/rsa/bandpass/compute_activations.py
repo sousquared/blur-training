@@ -8,7 +8,7 @@ import torch
 
 # add the path to load src module
 current_dir = pathlib.Path(os.path.abspath(__file__)).parent
-sys.path.append(os.path.join(str(current_dir), "../../../../imagenet16/"))
+sys.path.append(os.path.join(str(current_dir), "../../../../"))
 
 from src.utils.model import load_model
 from src.analysis.rsa.rdm import AlexNetRDM

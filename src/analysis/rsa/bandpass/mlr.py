@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from sklearn import linear_model
 
-sys.path.append("../../../../imagenet16/")
+sys.path.append("../../../../")
 
 from src.analysis.rsa.rdm import alexnet_layers
 from src.analysis.rsa.activations import load_activations
