@@ -102,14 +102,14 @@ $ python -u train.py --arch alexnet --mode mix -s 1 -n alexnet_mix_s1 --resume .
 ```
 
 ### Multi GPUs
-If you want to use multi GPUs trainig, see [pytorch imagenet trainning example][pytorch-imagenet].
+If you want to use multi GPUs trainig, see [pytorch imagenet training example][pytorch-imagenet].
 e.g.:
 ```bash 
 $ python -u train.py -a resnet50 --seed 42 --lr 0.2 --mode normal --epochs 60 -b 512 --dist_url 'tcp://127.0.0.1:10000' --dist_backend 'nccl' --multiprocessing_distributed --world_size 1 --rank 0 -n resnet50_normal_b512
 ```
 
 ## citations
-Training scripts and functions are based on [pytorch tutorial][pytorch-tutorial] and [pytorch imagenet trainning example][pytorch-imagenet].
+Training scripts and functions are based on [pytorch tutorial][pytorch-tutorial] and [pytorch imagenet training example][pytorch-imagenet].
 
 
 

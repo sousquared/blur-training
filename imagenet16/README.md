@@ -93,7 +93,7 @@ Demonstrations of 16-class-ImageNet, GaussianBlur, and CNN model architectures.
 
 
 ## citations
-Training scripts and functions are based on [pytorch tutorial][pytorch-tutorial] and [pytorch imagenet trainning example][pytorch-imagenet].
+Training scripts and functions are based on [pytorch tutorial][pytorch-tutorial] and [pytorch imagenet training example][pytorch-imagenet].
 
 
 [pytorch-tutorial]:https://github.com/pytorch/tutorials/blob/master/beginner_source/blitz/cifar10_tutorial.py
