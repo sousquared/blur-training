@@ -1,4 +1,5 @@
 import os
+import shutil
 
 import torch
 import torch.nn as nn
@@ -74,3 +75,10 @@ def save_model(state, param_path, epoch=None):
     else:
         filename = os.path.join(param_path, "epoch_{}.pth.tar".format(epoch))
     torch.save(state, filename)
+
+
+def save_checkpoint(state, is_best, param_path, epoch):
+    filename = param_path + "checkpoint.pth.tar"
+    torch.save(state, filename)
+    if is_best:
+        shutil.copyfile(filename, param_path + "model_best.pth.tar")
