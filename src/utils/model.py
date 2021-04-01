@@ -7,8 +7,11 @@ import torchvision.models as models
 
 
 def load_model(
-    arch: str, num_classes: int = 16, paralell: bool = False,
-    model_path: str = "", device: str = "",
+    arch: str,
+    num_classes: int = 16,
+    paralell: bool = False,
+    model_path: str = "",
+    device: str = "",
 ):
     """
     Load model from pytorch model zoo and change the number of final layser's units
@@ -40,7 +43,9 @@ def load_model(
             or arch.startswith("mnasnet")
             or arch.startswith("mobilenet")
         ):
-            model.classifier[-1] = nn.Linear(model.classifier[-1].in_features, num_classes)
+            model.classifier[-1] = nn.Linear(
+                model.classifier[-1].in_features, num_classes
+            )
         elif (
             arch.startswith("resne")
             or arch.startswith("shufflenet")

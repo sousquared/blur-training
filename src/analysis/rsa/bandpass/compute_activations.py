@@ -84,7 +84,9 @@ def analyze(
     out_dir: str,
 ):
     model_path = os.path.join(models_dir, model_name, f"epoch_{epoch:02d}.pth.tar")
-    model = load_model(arch=arch, num_classes=num_classes,model_path=model_path).to(device)
+    model = load_model(arch=arch, num_classes=num_classes, model_path=model_path).to(
+        device
+    )
 
     out_model_dir = os.path.join(out_dir, f"{model_name}_e{epoch:02d}")
     os.makedirs(out_model_dir, exist_ok=True)
