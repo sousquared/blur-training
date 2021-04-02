@@ -11,7 +11,7 @@ current_dir = pathlib.Path(os.path.abspath(__file__)).parent
 sys.path.append(os.path.join(str(current_dir), "../../../../"))
 
 from src.utils.model import load_model
-from src.analysis.rsa.rdm import AlexNetRDM
+from src.analysis.rsa.rsa import AlexNetRSA
 from src.dataset.imagenet16 import (
     load_data,
     num_channels,
@@ -91,7 +91,7 @@ def analyze(
     out_model_dir = os.path.join(out_dir, f"{model_name}_e{epoch:02d}")
     os.makedirs(out_model_dir, exist_ok=True)
 
-    RDM = AlexNetRDM(model)
+    RSA = AlexNetRSA(model)
 
     for image_id, (image, label) in enumerate(data_loader):
         """Note that data_loader returns single image for each loop
@@ -107,7 +107,7 @@ def analyze(
         # change the order of num_images and num_filters(+1)
         test_images = test_images.transpose(1, 0)  # (1, F+1, C, H, W)
 
-        activations = RDM.compute_activations(test_images[0].to(device))
+        activations = RSA.compute_activations(test_images[0].to(device))
         # print(activations["conv-relu-1"].shape)  # torch.Size([F+1, 64, 55, 55])
 
         # add parameter settings of this analysis

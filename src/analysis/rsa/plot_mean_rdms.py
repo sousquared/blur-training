@@ -10,7 +10,7 @@ from matplotlib import pyplot as plt
 current_dir = pathlib.Path(os.path.abspath(__file__)).parent
 sys.path.append(os.path.join(str(current_dir), "../../../"))
 
-from src.analysis.rsa.rdm import alexnet_layers
+from src.analysis.rsa.rsa import alexnet_layers
 
 # from src.dataset.imagenet16 import label_map
 

@@ -13,7 +13,7 @@ sys.path.append(os.path.join(str(current_dir), "../../../../"))
 
 from src.utils.model import load_model
 from src.utils.image import imsave
-from src.analysis.rsa.rdm import AlexNetRDM
+from src.analysis.rsa.rsa import AlexNetRSA
 from src.image_process.bandpass_images import (
     make_bandpass_images,
     make_bandpass_images_all_comb,
@@ -36,10 +36,10 @@ def analyze(
     model_path = os.path.join(models_dir, model_name, f"epoch_{epoch:02d}.pth.tar")
     model = load_model(arch=arch, model_path=model_path).to(device)
 
-    RDM = AlexNetRDM(model)
+    RSA = AlexNetRSA(model)
 
     for n in range(num_images):
-        activations = RDM.compute_activations(test_images[n])
+        activations = RSA.compute_activations(test_images[n])
         # print(activations["conv-relu-1"].shape)  # torch.Size([F+1, 64, 55, 55])
 
         # add parameter settings of this analysis

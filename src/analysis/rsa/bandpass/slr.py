@@ -8,7 +8,7 @@ from sklearn import linear_model
 
 sys.path.append("../../../../")
 
-from src.analysis.rsa.rdm import alexnet_layers
+from src.analysis.rsa.rsa import alexnet_layers
 from src.analysis.rsa.activations import load_activations
 
 

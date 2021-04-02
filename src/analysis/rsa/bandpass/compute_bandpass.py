@@ -13,7 +13,7 @@ sys.path.append(os.path.join(str(current_dir), "../../../../"))
 
 from src.utils.model import load_model
 from src.utils.image import imsave
-from src.analysis.rsa.rdm import AlexNetRDM
+from src.analysis.rsa.rsa import AlexNetRSA
 from src.image_process.bandpass_images import (
     make_bandpass_images,
     make_bandpass_images_all_comb,
@@ -55,8 +55,8 @@ def compute_mean_rdms(model, test_images) -> dict:
             Where: F is the number of filters.
                 F+1 means filter applied images(F) and a raw image(+1)
     """
-    RDM = AlexNetRDM(model)
-    mean_rdms = RDM.compute_mean_rdms(test_images)
+    RSA = AlexNetRSA(model)
+    mean_rdms = RSA.compute_mean_rdms(test_images)
 
     return mean_rdms
 
