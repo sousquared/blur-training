@@ -16,7 +16,7 @@ from src.analysis.rsa.rsa import alexnet_layers
 
 
 def load_rdms(in_dir, model_name, epoch):
-    file_path = os.path.join(in_dir, model_name + f"_e{epoch:02d}.pkl")
+    file_path = os.path.join(in_dir, f"{model_name}_e{epoch:02d}.pkl")
     with open(file_path, "rb") as f:
         return pickle.load(f)
 
