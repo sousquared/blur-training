@@ -15,7 +15,7 @@ alexnet_layers = [
 ]
 
 
-class AlexNetRDM:
+class AlexNetRSA:
     def __init__(self, model):
         """
         Args:
