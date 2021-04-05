@@ -6,7 +6,7 @@ import sys
 current_dir = pathlib.Path(os.path.abspath(__file__)).parent
 sys.path.append(str(current_dir) + "/../../../")
 
-from src.analysis.rsa.bandpass.mean_rdms import compute_mean_rdms, save_mean_rdms, plot_rdms
+from src.analysis.rsa.bandpass.mean_rdms import compute_mean_rdms, save_rdms, plot_rdms
 
 if __name__ == "__main__":
     arch = "alexnet"
@@ -60,9 +60,7 @@ if __name__ == "__main__":
 
         mean_rdms = compute_mean_rdms(in_dir=in_dir, num_filters=6, num_images=1600)
 
-        save_mean_rdms(
-            mean_rdms=mean_rdms, out_dir=results_dir, model_name=model_name, epoch=epoch
-        )
+        save_rdms(mean_rdms=mean_rdms, out_dir=results_dir, model_name=model_name, epoch=epoch)
 
         plot_rdms(
             mean_rdms=mean_rdms, out_dir=plots_dir, model_name=model_name, epoch=epoch
