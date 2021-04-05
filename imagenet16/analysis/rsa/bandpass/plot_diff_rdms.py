@@ -11,7 +11,7 @@ from src.analysis.rsa.rdm import load_rdms
 from src.analysis.rsa.bandpass.mean_rdms import plot_bandpass_rdms
 
 if __name__ == "__main__":
-    in_dir = "../../analysis/rsa/bandpass/results/mean_rdms/alexnet/"
+    in_dir = "./results/mean_rdms/alexnet/"
     out_dir = "./plots/"
     assert os.path.exists(in_dir), f"{in_dir} does not exist."
     if not os.path.exists(out_dir):
