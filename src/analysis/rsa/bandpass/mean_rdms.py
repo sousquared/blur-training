@@ -49,8 +49,10 @@ def compute_mean_rdms(
 
     return mean_rdms
 
-    
-def plot_bandpass_rdms(rdms, num_filters, vmin=0, vmax=2, title="", out_file="rdms.png", show_plot=False):
+
+def plot_bandpass_rdms(
+    rdms, num_filters, vmin=0, vmax=2, title="", out_file="rdms.png", show_plot=False
+):
     """Plot several layers RDMs in one figure.
     Args:
         model_name: name of the model to examine.
@@ -125,7 +127,9 @@ if __name__ == "__main__":
 
     mean_rdms = compute_mean_rdms(in_dir=in_dir, num_filters=6, num_images=1600)
 
-    save_rdms(mean_rdms=mean_rdms, out_dir=results_dir, model_name=model_name, epoch=epoch)
+    save_rdms(
+        mean_rdms=mean_rdms, out_dir=results_dir, model_name=model_name, epoch=epoch
+    )
 
     # get analysis parameters.
     num_images = mean_rdms["num_images"]
@@ -141,5 +145,11 @@ if __name__ == "__main__":
     plot_file = os.path.join(plots_dir, filename)
 
     plot_bandpass_rdms(
-        rdms=mean_rdms, num_filters=num_filters, vmin=0, vmax=2, title=title, out_file=plot_file, show_plot=False
+        rdms=mean_rdms,
+        num_filters=num_filters,
+        vmin=0,
+        vmax=2,
+        title=title,
+        out_file=plot_file,
+        show_plot=False,
     )
