@@ -37,7 +37,7 @@ if __name__ == "__main__":
     num_filters = rdms_normal["num_filters"]
 
     # (optional) set title
-    title = f"{arch}, mix_s04 - normal, epoch={epoch}"
+    title = f"1000-class-{arch}, mix_s04 - normal, epoch={epoch}"
 
     # set filename
     filename = "1000-class_diff_normal_mix04_e{}_f{}_n{}.png".format(
