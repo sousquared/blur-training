@@ -1,3 +1,9 @@
+dev/
+
+results/
+
+plots/
+
 tools/
 
 .DS_Store
