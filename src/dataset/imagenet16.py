@@ -37,8 +37,8 @@ label_map = {k: v for k, v in enumerate(categories)}
 
 
 def load_imagenet16(
-    batch_size: int,
-    dataset_path: str = "/mnt/data/ImageNet/ILSVRC2012/",
+    imagenet_path: str = "/mnt/data/ImageNet/ILSVRC2012/",
+    batch_size: int = 32,
     info_path: str = str(current_dir) + "/info/",
     normalize: bool = True,
 ):
@@ -46,7 +46,7 @@ def load_imagenet16(
     load 16-class-ImageNet
     Arguments:
         batch_size (int): the batch size used in training and test
-        dataset_path (str): the path to ImageNet
+        imagenet_path (str): the path to ImageNet
         info_path (str): the path to the directory that contains
                     imagenet_class_index.json, wordnet.is_a.txt, words.txt
         normalize (bool): Use normalization on images or nor. (default: True)
@@ -54,11 +54,11 @@ def load_imagenet16(
     """
 
     # 16-class-imagenet
-    in_hier = ImageNetHierarchy(dataset_path, info_path)
+    in_hier = ImageNetHierarchy(imagenet_path, info_path)
     superclass_wnid = common_superclass_wnid("geirhos_16")
     class_ranges, label_map = in_hier.get_subclasses(superclass_wnid, balanced=True)
 
-    custom_dataset = datasets.CustomImageNet(dataset_path, class_ranges)
+    custom_dataset = datasets.CustomImageNet(imagenet_path, class_ranges)
     # data augumentation for imagenet in robustness library is:
     # https://github.com/MadryLab/robustness/blob/master/robustness/data_augmentation.py
 
@@ -88,7 +88,7 @@ def make_test_images_by_class(
     Returns: test images (num_classes, N, C, H, W)
         where: num_classes = 16
     """
-    _, test_loader = load_imagenet16(batch_size=32, dataset_path=dataset_path)
+    _, test_loader = load_imagenet16(imagenet_path=dataset_path, batch_size=32)
 
     counts = torch.zeros(num_classes)
     test_images = torch.zeros([num_classes, num_images, num_channels, height, width])

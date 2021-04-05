@@ -53,7 +53,7 @@ def main(
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     # make Dataloader
-    _, test_loader = load_imagenet16(batch_size=1, dataset_path=dataset_path)
+    _, test_loader = load_imagenet16(imagenet_path=dataset_path, batch_size=1)
 
     # make filters
     filters = make_bandpass_filters(num_filters=num_filters)
