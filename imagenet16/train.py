@@ -17,7 +17,7 @@ current_dir = pathlib.Path(os.path.abspath(__file__)).parent
 sys.path.append(str(current_dir) + "/../")
 
 from src.image_process.lowpass_filter import GaussianBlurAll, RandomGaussianBlurAll
-from src.dataset.imagenet16 import load_data
+from src.dataset.imagenet16 import load_imagenet16
 from src.utils.model import load_model, save_model
 from src.utils.adjust import (
     adjust_learning_rate,
@@ -182,7 +182,7 @@ def main():
         torch.cuda.manual_seed(args.seed)
 
     # data settings
-    trainloader, testloader = load_data(batch_size=args.batch_size)
+    trainloader, testloader = load_imagenet16(batch_size=args.batch_size)
 
     # Model, Criterion, Optimizer
     model = load_model(args.arch)  # remember the number of final outputs is 16.

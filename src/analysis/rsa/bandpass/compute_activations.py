@@ -13,7 +13,7 @@ sys.path.append(os.path.join(str(current_dir), "../../../../"))
 from src.utils.model import load_model
 from src.analysis.rsa.rsa import AlexNetRSA
 from src.dataset.imagenet16 import (
-    load_data,
+    load_imagenet16,
     num_channels,
     height,
     width,
@@ -53,7 +53,7 @@ def main(
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     # make Dataloader
-    _, test_loader = load_data(dataset_path=dataset_path, batch_size=1)
+    _, test_loader = load_imagenet16(batch_size=1, dataset_path=dataset_path)
 
     # make filters
     filters = make_bandpass_filters(num_filters=num_filters)

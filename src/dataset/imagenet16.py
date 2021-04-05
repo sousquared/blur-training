@@ -37,7 +37,7 @@ categories = sorted(
 label_map = {k: v for k, v in enumerate(categories)}
 
 
-def load_data(
+def load_imagenet16(
     batch_size: int,
     dataset_path: str = "/mnt/data/ImageNet/ILSVRC2012/",
     info_path: str = str(current_dir) + "/info/",
@@ -89,7 +89,7 @@ def make_test_images_by_class(
     Returns: test images (num_classes, N, C, H, W)
         where: num_classes = 16
     """
-    _, test_loader = load_data(dataset_path=dataset_path, batch_size=32)
+    _, test_loader = load_imagenet16(batch_size=32, dataset_path=dataset_path)
 
     counts = torch.zeros(num_classes)
     test_images = torch.zeros([num_classes, num_images, num_channels, height, width])
