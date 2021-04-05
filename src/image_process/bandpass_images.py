@@ -54,7 +54,7 @@ def make_bandpass_images(
     # bandpass images
     filters = make_bandpass_filters(num_filters=num_filters)
     for i, (s1, s2) in enumerate(filters.values(), 1):
-        test_images[i] = apply_bandpass_filter(images=raw_images, s1=s1, s2=s2)
+        test_images[i] = apply_bandpass_filter(images=raw_images, sigma1=s1, sigma2=s2)
 
     # reshape to (-1, C, H, W)
     # test_images = test_images.view(-1, *test_images.shape[2:])
@@ -101,7 +101,7 @@ def make_bandpass_images_all_comb(
         img_list = []
         for filter_id in filter_ids:
             s1, s2 = filters[filter_id]
-            img_list += [apply_bandpass_filter(images=raw_images, s1=s1, s2=s2)]
+            img_list += [apply_bandpass_filter(images=raw_images, sigma1=s1, sigma2=s2)]
 
         if len(img_list) == 1:
             test_images[i] = img_list[0]

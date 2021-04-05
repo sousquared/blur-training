@@ -102,7 +102,7 @@ def analyze(
         test_images = torch.zeros([len(filters) + 1, 1, num_channels, height, width])
         test_images[0] = image  # add raw images
         for i, (s1, s2) in enumerate(filters.values(), 1):
-            test_images[i] = apply_bandpass_filter(images=image, s1=s1, s2=s2)
+            test_images[i] = apply_bandpass_filter(images=image, sigma1=s1, sigma2=s2)
 
         # change the order of num_images and num_filters(+1)
         test_images = test_images.transpose(1, 0)  # (1, F+1, C, H, W)
