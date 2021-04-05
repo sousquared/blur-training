@@ -23,6 +23,7 @@ from torchvision import models
 current_dir = pathlib.Path(os.path.abspath(__file__)).parent
 sys.path.append(str(current_dir) + "/../")
 
+from src.dataset.imagenet import load_imagenet
 from src.image_process.lowpass_filter import GaussianBlurAll, RandomGaussianBlurAll
 from src.utils.model import save_model, save_checkpoint
 from src.utils.adjust import (
@@ -381,54 +382,11 @@ def main_worker(gpu, ngpus_per_node, args):
     cudnn.benchmark = True  # for fast run
 
     # Data loading code
-    traindir = os.path.join(IMAGENET_PATH, "train")
-    valdir = os.path.join(IMAGENET_PATH, "val")
-    normalize = transforms.Normalize(
-        mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
-    )
-
-    train_dataset = datasets.ImageFolder(
-        traindir,
-        transforms.Compose(
-            [
-                transforms.RandomResizedCrop(224),
-                transforms.RandomHorizontalFlip(),
-                transforms.ToTensor(),
-                normalize,
-            ]
-        ),
-    )
-
-    if args.distributed:
-        train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
-    else:
-        train_sampler = None
-
-    train_loader = torch.utils.data.DataLoader(
-        train_dataset,
+    train_loader, train_sampler, val_loader = load_imagenet(
+        imagenet_path=IMAGENET_PATH,
         batch_size=args.batch_size,
-        shuffle=(train_sampler is None),
-        num_workers=args.workers,
-        pin_memory=True,
-        sampler=train_sampler,
-    )
-
-    val_loader = torch.utils.data.DataLoader(
-        datasets.ImageFolder(
-            valdir,
-            transforms.Compose(
-                [
-                    transforms.Resize(256),
-                    transforms.CenterCrop(224),
-                    transforms.ToTensor(),
-                    normalize,
-                ]
-            ),
-        ),
-        batch_size=args.batch_size,
-        shuffle=False,
-        num_workers=args.workers,
-        pin_memory=True,
+        distributed=args.distributed,
+        workers=args.workers,
     )
 
     if args.evaluate:
