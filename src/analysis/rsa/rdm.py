@@ -137,4 +137,6 @@ if __name__ == "__main__":
         )  # add "target_id" if you need it.
         out_file = os.path.join(out_dir, filename)
 
-        plot_rdms(rdms=rdms, vmin=0, vmax=2, title=title, out_file=out_file, show_plot=False)
+        plot_rdms(
+            rdms=rdms, vmin=0, vmax=2, title=title, out_file=out_file, show_plot=False
+        )

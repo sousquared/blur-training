@@ -36,6 +36,7 @@ if torch.cuda.is_available():
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
+
 def calc_band_acc(model, sigma1=0, sigma2=0, raw=False):
     """
     Args:
