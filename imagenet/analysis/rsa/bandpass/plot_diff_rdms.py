@@ -40,7 +40,7 @@ if __name__ == "__main__":
     title = f"{arch}, mix_s04 - normal, epoch={epoch}"
 
     # set filename
-    filename = "diff_normal_mix04_e{}_f{}_n{}.png".format(
+    filename = "1000-class_diff_normal_mix04_e{}_f{}_n{}.png".format(
         epoch, num_filters, num_images
     )  # add "target_id" if you need it.
     out_file = os.path.join(out_dir, filename)
