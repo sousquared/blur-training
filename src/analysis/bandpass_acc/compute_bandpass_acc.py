@@ -21,6 +21,34 @@ from src.dataset.imagenet16 import load_imagenet16
 from src.dataset.imagenet import load_imagenet
 
 
+def test_performance(model, test_loader, bandpass_filters, device, out_file):
+    """
+    compute performance of the model
+    and return the results as lists
+    """
+    acc1_list = []
+
+    # acc. of raw test images
+    acc1 = compute_bandpass_acc(model=model, test_loader=test_loader, device=device, raw=True)
+    acc1_list.append(acc1.item())
+
+    # acc. of bandpass test images
+    for s1, s2 in bandpass_filters.values():
+        acc1 = compute_bandpass_acc(
+            model=model, test_loader=test_loader, sigma1=s1, sigma2=s2, device=device
+        )
+        acc1_list.append(acc1.item())
+
+    # range of sigma
+    bandpass_sigmas = ["0"] + [f"{s1}-{s2}" for s1, s2 in bandpass_filters.values()]
+
+    # make dataframe and save
+    df = pd.DataFrame(
+        np.array(acc1_list).reshape(1, -1), index=[model_name], columns=bandpass_sigmas
+    )
+    df.to_csv(out_file)
+
+
 def compute_bandpass_acc(
     model,
     test_loader: iter,
@@ -53,34 +81,6 @@ def compute_bandpass_acc(
             top1.update(acc1[0], inputs.size(0))
 
     return top1.avg
-
-
-def test_performance(model, test_loader, bandpass_filters, device, out_file):
-    """
-    compute performance of the model
-    and return the results as lists
-    """
-    acc1_list = []
-
-    # acc. of raw test images
-    acc1 = compute_bandpass_acc(model=model, test_loader=test_loader, device=device, raw=True)
-    acc1_list.append(acc1.item())
-
-    # acc. of bandpass test images
-    for s1, s2 in bandpass_filters.values():
-        acc1 = compute_bandpass_acc(
-            model=model, test_loader=test_loader, sigma1=s1, sigma2=s2, device=device
-        )
-        acc1_list.append(acc1.item())
-
-    # range of sigma
-    bandpass_sigmas = ["0"] + [f"{s1}-{s2}" for s1, s2 in bandpass_filters.values()]
-
-    # make dataframe and save
-    df = pd.DataFrame(
-        np.array(acc1_list).reshape(1, -1), index=[model_name], columns=bandpass_sigmas
-    )
-    df.to_csv(out_file)
 
 
 if __name__ == "__main__":
