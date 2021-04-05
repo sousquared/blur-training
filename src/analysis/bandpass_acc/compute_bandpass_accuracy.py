@@ -180,5 +180,6 @@ if __name__ == "__main__":
             model=model,
             test_loader=test_loader,
             bandpass_filters=bandpass_filters,
+            device=device,
             out_file=out_file,
         )
