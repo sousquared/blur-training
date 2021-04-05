@@ -21,7 +21,7 @@ from src.dataset.imagenet16 import load_imagenet16
 from src.dataset.imagenet import load_imagenet
 
 
-def compute_band_acc(
+def compute_bandpass_acc(
     model,
     test_loader: iter,
     sigma1: int = 0,
@@ -63,13 +63,13 @@ def test_performance(model, test_loader, bandpass_filters, device, out_file):
     acc1_list = []
 
     # acc. of raw test images
-    acc1 = compute_band_acc(model, raw=True)
+    acc1 = compute_bandpass_acc(model=model, test_loader=test_loader, device=device, raw=True)
     acc1_list.append(acc1.item())
 
     # acc. of bandpass test images
     for s1, s2 in bandpass_filters.values():
-        acc1 = compute_band_acc(
-            model, test_loader=test_loader, sigma1=s1, sigma2=s2, device=device
+        acc1 = compute_bandpass_acc(
+            model=model, test_loader=test_loader, sigma1=s1, sigma2=s2, device=device
         )
         acc1_list.append(acc1.item())
 
