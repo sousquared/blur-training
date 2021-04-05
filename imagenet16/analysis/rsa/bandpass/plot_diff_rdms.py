@@ -12,7 +12,7 @@ from src.analysis.rsa.bandpass.mean_rdms import plot_bandpass_rdms
 
 if __name__ == "__main__":
     in_dir = "./results/mean_rdms/alexnet/"
-    out_dir = "./plots/"
+    out_dir = "./plots/diff_rdms/"
     assert os.path.exists(in_dir), f"{in_dir} does not exist."
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
