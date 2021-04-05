@@ -122,7 +122,7 @@ if __name__ == "__main__":
     # load, plot and save
     for model_name in model_names:
         # load rdms
-        rdms = load_rdms(in_dir=in_dir, model_name=model_name)
+        rdms = load_rdms(in_dir=in_dir, model_name=model_name, epoch=epoch)
 
         # get analysis parameters.
         num_images = rdms["num_images"]
