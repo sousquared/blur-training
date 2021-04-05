@@ -53,5 +53,5 @@ if __name__ == "__main__":
         vmax=0.5,
         title=title,
         out_file=out_file,
-        show_plot=True,
+        show_plot=False,
     )
