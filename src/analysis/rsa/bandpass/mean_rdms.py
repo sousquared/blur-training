@@ -128,8 +128,9 @@ if __name__ == "__main__":
 
     # I/O settings
     data_dir = f"./results/activations/{arch}/"
-    results_dir = f"./results/mean_rdms_{metrics}/{num_classes}-class_{arch}/"
-    plots_dir = f"./plots/mean_rdms_{metrics}/{num_classes}-class_{arch}/"
+    out_dir = "/home/sou/work/blur-training/analysis/rsa/bandpass"
+    results_dir = os.path.join(out_dir, f"results/mean_rdms_{metrics}/{num_classes}-class_{arch}/")
+    plots_dir = os.path.join(out_dir, f"plots/mean_rdms_{metrics}/{num_classes}-class_{arch}/")
 
     assert os.path.exists(data_dir), f"{data_dir} does not exist."
     os.makedirs(results_dir, exist_ok=True)
