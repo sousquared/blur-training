@@ -126,10 +126,13 @@ if __name__ == "__main__":
     arch = "alexnet"
     num_classes = 16
     epoch = 60
-    models_dir = "/Users/sou/lab1-mnt/data1/pretrained_models/blur-training/imagenet{}/models/".format(
+    models_dir = "/mnt/data1/pretrained_models/blur-training/imagenet{}/models/".format(
         16 if num_classes == 16 else ""  # else is (num_classes == 1000)
     )
-    out_dir = f"./results/activations/{arch}/{num_classes}-class"
+    out_dir = f"/home/sou/work/blur-training/analysis/rsa/bandpass/results/activations/{num_classes}-class_{arch}"
+    assert os.path.exists(models_dir), f"{models_dir} does not exist."
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
 
     # all_filter_combinations = False
     # if all_filter_combinations:
