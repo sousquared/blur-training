@@ -93,7 +93,7 @@ class AlexNetRSA:
                 # F+1 means band-pass filters(F) and raw image(+1)
                 self.activations = self.compute_activations(imgs)
                 activation = self.activations[layer].reshape(num_filters + 1, -1)
-                rdm = squareform(pdist(activation, metric="correlation"))
+                rdm = squareform(pdist(activation, metric="correlation"))  # 1 - corr.
                 rdms.append(rdm)
 
             rdms = np.array(rdms)

@@ -40,7 +40,7 @@ def compute_mean_rdms(
             file_name = f"image{image_id:04d}_f{num_filters:02d}.pkl"
             activations = load_activations(in_dir=in_dir, file_name=file_name)
             activation = activations[layer].reshape(num_filters + 1, -1)
-            rdm = squareform(pdist(activation, metric="correlation"))
+            rdm = squareform(pdist(activation, metric="correlation"))  # 1 - corr.
             rdms.append(rdm)
 
         rdms = np.array(rdms)
