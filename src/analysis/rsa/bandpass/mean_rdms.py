@@ -44,7 +44,14 @@ def compute_mean_rdms(
             if metrics == "correlation":
                 rdm = squareform(pdist(activation, metric=metrics))  # 1 - corr.
             elif metrics == "covariance":
-                rdm = squareform(pdist(activation, lambda u, v: np.average((u - np.average(u)) * (v - np.average(v)))))
+                rdm = squareform(
+                    pdist(
+                        activation,
+                        lambda u, v: np.average(
+                            (u - np.average(u)) * (v - np.average(v))
+                        ),
+                    )
+                )
             rdms.append(rdm)
 
         rdms = np.array(rdms)
@@ -166,7 +173,9 @@ if __name__ == "__main__":
         in_dir = os.path.join(data_dir, f"{model_name}_e{epoch:02d}")
         assert os.path.exists(in_dir), f"{in_dir} does not exist."
 
-        mean_rdms = compute_mean_rdms(in_dir=in_dir, num_filters=6, num_images=1600, metrics=metrics)
+        mean_rdms = compute_mean_rdms(
+            in_dir=in_dir, num_filters=6, num_images=1600, metrics=metrics
+        )
 
         result_file = f"{model_name}_e{epoch:02d}.pkl"
         result_path = os.path.join(results_dir, result_file)
@@ -177,7 +186,9 @@ if __name__ == "__main__":
         num_filters = mean_rdms["num_filters"]
 
         # (optional) set title of the plot
-        title = f"RDM({metrics}), {num_classes}-class-{arch}, {model_name}, epoch={epoch}"
+        title = (
+            f"RDM({metrics}), {num_classes}-class-{arch}, {model_name}, epoch={epoch}"
+        )
 
         # set the plot path
         plot_file = f"{num_classes}-class_mean-rdms_{model_name}_e{epoch}_f{num_filters}_n{num_images}.png"

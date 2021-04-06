@@ -126,10 +126,8 @@ if __name__ == "__main__":
     arch = "alexnet"
     num_classes = 16
     epoch = 60
-    models_dir = (
-        "/Users/sou/lab1-mnt/data1/pretrained_models/blur-training/imagenet{}/models/".format(
-            16 if num_classes == 16 else ""  # else is (num_classes == 1000)
-        )
+    models_dir = "/Users/sou/lab1-mnt/data1/pretrained_models/blur-training/imagenet{}/models/".format(
+        16 if num_classes == 16 else ""  # else is (num_classes == 1000)
     )
     out_dir = f"./results/activations/{arch}/{num_classes}-class"
 
