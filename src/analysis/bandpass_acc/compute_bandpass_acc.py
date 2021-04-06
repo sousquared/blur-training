@@ -77,6 +77,7 @@ def compute_bandpass_acc(
                 )
             inputs = inputs.to(device)
             outputs = model(inputs)
+            # model.num_classes == 1000 and test_loader.num_classes == 16:
             acc1 = accuracy(outputs, labels, topk=(1,))
             top1.update(acc1[0], inputs.size(0))
 
@@ -86,19 +87,19 @@ def compute_bandpass_acc(
 if __name__ == "__main__":
     # args
     arch = "alexnet"
-    num_classes = 16  # number of last output of the models
+    num_classes = 16 # number of last output of the models
     epoch = 60
     batch_size = 64
-    imagenet_path = "/mnt/data1/ImageNet/ILSVRC2012/"
-    test_dataset = "imagenet16"
+    imagenet_path = "/Users/sou/lab1-mnt/data1/ImageNet/ILSVRC2012/"
+    dataset = "imagenet16"  # dataset to use
     num_filters = 6
 
     models_dir = (
-        "/mnt/data1/pretrained_models/blur-training/imagenet{}/logs/models/".format(
+        "/Users/sou/lab1-mnt/data1/pretrained_models/blur-training/imagenet{}/logs/models/".format(
             16 if num_classes == 16 else ""  # else is (num_classes == 1000)
         )
     )
-    results_dir = f"/home/sou/work/blur-training/analysis/bandpass_acc/results/{num_classes}-class/{arch}/"
+    results_dir = f"/Users/sou/work/blur-training/analysis/bandpass_acc/results/{num_classes}-class/{arch}/"
     assert os.path.exists(models_dir), f"{models_dir} does not exist."
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
@@ -116,11 +117,11 @@ if __name__ == "__main__":
     # print(device)
 
     # loading data
-    if test_dataset == "imagenet16":
+    if dataset == "imagenet16":
         _, test_loader = load_imagenet16(
             imagenet_path=imagenet_path, batch_size=batch_size
         )
-    elif test_dataset == "imagenet":
+    elif dataset == "imagenet":
         _, _, test_loader = load_imagenet(
             imagenet_path=imagenet_path,
             batch_size=batch_size,
@@ -168,8 +169,13 @@ if __name__ == "__main__":
             models_dir, model_name, "epoch_{}.pth.tar".format(epoch)
         )
         model = load_model(
-            arch=arch, num_classes=num_classes, model_path=model_path
+            arch=arch, num_classes=num_classes, model_path=model_path,
+            device="cpu"
         ).to(device)
+        print(model)
+        if model.num_classes == 1000 and test_loader.num_classes == 16:
+            print("need 1000 -> 16")
+        hoge
 
         # set path to output
         out_file = os.path.join(

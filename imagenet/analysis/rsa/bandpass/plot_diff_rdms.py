@@ -22,14 +22,14 @@ if __name__ == "__main__":
 
     mode = "normal"
     model_name = f"{arch}_{mode}"
-    rdms_normal = load_rdms(in_dir=in_dir, model_name=model_name, epoch=epoch)
+    rdms_normal = load_rdms(file_path=epoch)
 
     # models to compare
     blur_models = ["mix_s04", "all_s04"]
 
     for blur_model in blur_models:
         model_name = f"{arch}_{blur_model}"
-        rdms_blur = load_rdms(in_dir=in_dir, model_name=model_name, epoch=epoch)
+        rdms_blur = load_rdms(file_path=epoch)
 
         diff_rdms = {}
         for layer in alexnet_layers:
