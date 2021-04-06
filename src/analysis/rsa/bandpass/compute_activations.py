@@ -122,10 +122,16 @@ def analyze(
 
 
 if __name__ == "__main__":
+    # arguments
     arch = "alexnet"
-    mode = "normal"
-    model_names = [f"{arch}_{mode}"]
-    out_dir = f"./results/{arch}/activations_all_images"
+    num_classes = 16
+    epoch = 60
+    models_dir = (
+        "/Users/sou/lab1-mnt/data1/pretrained_models/blur-training/imagenet{}/models/".format(
+            16 if num_classes == 16 else ""  # else is (num_classes == 1000)
+        )
+    )
+    out_dir = f"./results/activations/{arch}/{num_classes}-class"
 
     # all_filter_combinations = False
     # if all_filter_combinations:
@@ -133,12 +139,42 @@ if __name__ == "__main__":
     # else:
     #     out_dir = f"./results/{arch}_bandpass/activations"
 
+    # models to compare
+    modes = [
+        "normal",
+        # "all",
+        # "mix",
+        # "random-mix",
+        # "single-step",
+        # "fixed-single-step",
+        # "reversed-single-step",
+        # "multi-steps",
+    ]
+
+    # sigmas to compare
+    sigmas_mix = [s for s in range(1, 6)] + [10]
+    sigmas_random_mix = ["00-05", "00-10"]
+
+    # make model name list
+    model_names = []
+    for mode in modes:
+        if mode in ("normal", "multi-steps"):
+            model_names += [f"{arch}_{mode}"]
+        elif mode == "random-mix":
+            for min_max in sigmas_random_mix:
+                model_names += [f"{arch}_{mode}_s{min_max}"]
+        elif mode == "mix":
+            for sigma in sigmas_mix:
+                model_names += [f"{arch}_{mode}_s{sigma:02d}"]
+        else:
+            for s in range(4):
+                model_names += [f"{arch}_{mode}_s{s + 1:02d}"]
+
     main(
         arch=arch,
-        num_classes=16,
+        num_classes=num_classes,
         model_names=model_names,
-        epoch=60,
-        models_dir="/mnt/work/blur-training/imagenet16/logs/models/",  # model directory
+        models_dir=models_dir,  # model directory
         out_dir=out_dir,
         dataset_path="/mnt/data1/ImageNet/ILSVRC2012/",
         # all_filter_combinations=all_filter_combinations,
