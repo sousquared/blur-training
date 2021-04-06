@@ -29,7 +29,9 @@ def test_performance(model, test_loader, bandpass_filters, device, out_file):
     acc1_list = []
 
     # acc. of raw test images
-    acc1 = compute_bandpass_acc(model=model, test_loader=test_loader, device=device, raw=True)
+    acc1 = compute_bandpass_acc(
+        model=model, test_loader=test_loader, device=device, raw=True
+    )
     acc1_list.append(acc1.item())
 
     # acc. of bandpass test images
@@ -87,17 +89,15 @@ def compute_bandpass_acc(
 if __name__ == "__main__":
     # args
     arch = "alexnet"
-    num_classes = 16 # number of last output of the models
+    num_classes = 16  # number of last output of the models
     epoch = 60
     batch_size = 64
     imagenet_path = "/Users/sou/lab1-mnt/data1/ImageNet/ILSVRC2012/"
     dataset = "imagenet16"  # dataset to use
     num_filters = 6
 
-    models_dir = (
-        "/Users/sou/lab1-mnt/data1/pretrained_models/blur-training/imagenet{}/logs/models/".format(
-            16 if num_classes == 16 else ""  # else is (num_classes == 1000)
-        )
+    models_dir = "/Users/sou/lab1-mnt/data1/pretrained_models/blur-training/imagenet{}/models/".format(
+        16 if num_classes == 16 else ""  # else is (num_classes == 1000)
     )
     results_dir = f"/Users/sou/work/blur-training/analysis/bandpass_acc/results/{num_classes}-class/{arch}/"
     assert os.path.exists(models_dir), f"{models_dir} does not exist."
@@ -169,8 +169,7 @@ if __name__ == "__main__":
             models_dir, model_name, "epoch_{}.pth.tar".format(epoch)
         )
         model = load_model(
-            arch=arch, num_classes=num_classes, model_path=model_path,
-            device="cpu"
+            arch=arch, num_classes=num_classes, model_path=model_path, device="cpu"
         ).to(device)
         print(model)
         if model.num_classes == 1000 and test_loader.num_classes == 16:
