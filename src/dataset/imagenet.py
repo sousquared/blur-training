@@ -62,4 +62,7 @@ def load_imagenet(
         pin_memory=True,
     )
 
+    train_loader.num_classes = 1000
+    val_loader.num_classes = 1000
+
     return train_loader, train_sampler, val_loader

@@ -11,7 +11,7 @@ def load_model(
     num_classes: int = 16,
     paralell: bool = False,
     model_path: str = "",
-    device: str = "",
+    device: str = "cuda:0",
 ):
     """
     Load model from pytorch model zoo and change the number of final layser's units
@@ -24,9 +24,9 @@ def load_model(
     Returns: model (torch.model)
     """
     model = models.__dict__[arch]()
+    model.num_classes = num_classes
     if num_classes == 1000:
-        checkpoint = torch.load(model_path, map_location="cuda:0")
-        model = models.__dict__[arch]()
+        checkpoint = torch.load(model_path, map_location=device)
         try:
             model.load_state_dict(checkpoint["state_dict"])
         except RuntimeError:
