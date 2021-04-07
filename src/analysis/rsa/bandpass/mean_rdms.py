@@ -120,9 +120,7 @@ def plot_bandpass_rdms(
 
 if __name__ == "__main__":
     arch = "alexnet"
-    num_classes = 16
-    mode = "normal"
-    model_name = f"{arch}_{mode}"
+    num_classes = 1000
     epoch = 60
     metrics = "correlation"
 
@@ -136,39 +134,35 @@ if __name__ == "__main__":
     os.makedirs(results_dir, exist_ok=True)
     os.makedirs(plots_dir, exist_ok=True)
 
-    in_dir = os.path.join(data_dir, f"{model_name}_e{epoch:02d}")
-    assert os.path.exists(in_dir), f"{in_dir} does not exist."
-
     # models to compare
+    model_names = [
+        f"{arch}_normal",
+        f"{arch}_multi-steps",
+    ]
     modes = [
-        "normal",
-        # "all",
-        # "mix",
-        # "random-mix",
-        # "single-step",
-        # "fixed-single-step",
-        # "reversed-single-step",
-        # "multi-steps",
+        # f"{arch}_all",
+        # f"{arch}_mix",
+        # f"{arch}_random-mix",
+        # f"{arch}_single-step",
+        # f"{arch}_fixed-single-step",
+        # f"{arch}_reversed-single-step",
     ]
 
     # sigmas to compare
     sigmas_mix = [s for s in range(1, 6)] + [10]
     sigmas_random_mix = ["00-05", "00-10"]
 
-    # make model name list
-    model_names = []
+    # add sigma to compare to the model names
     for mode in modes:
-        if mode in ("normal", "multi-steps"):
-            model_names += [f"{arch}_{mode}"]
-        elif mode == "random-mix":
+        if mode == f"{arch}_random-mix":
             for min_max in sigmas_random_mix:
-                model_names += [f"{arch}_{mode}_s{min_max}"]
-        elif mode == "mix":
+                model_names += [f"{mode}_s{min_max}"]
+        elif mode == f"{arch}_mix":
             for sigma in sigmas_mix:
-                model_names += [f"{arch}_{mode}_s{sigma:02d}"]
+                model_names += [f"{mode}_s{sigma:02d}"]
         else:
-            for s in range(4):
-                model_names += [f"{arch}_{mode}_s{s + 1:02d}"]
+            for sigma in range(1, 5):
+                model_names += [f"{mode}_s{sigma:02d}"]
 
     for model_name in model_names:
         in_dir = os.path.join(data_dir, f"{model_name}_e{epoch:02d}")
@@ -188,13 +182,14 @@ if __name__ == "__main__":
 
         # (optional) set title of the plot
         title = (
-            f"RDM({metrics}), {num_classes}-class-{arch}, {model_name}, epoch={epoch}"
+            f"RDM({metrics}), {num_classes}-class, {model_name}, epoch={epoch}"
         )
 
         # set the plot path
         plot_file = f"{num_classes}-class_mean-rdms_{model_name}_e{epoch}_f{num_filters}_n{num_images}.png"
         plot_path = os.path.join(plots_dir, plot_file)
 
+        # plot
         plot_bandpass_rdms(
             rdms=mean_rdms,
             num_filters=num_filters,
