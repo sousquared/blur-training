@@ -140,10 +140,10 @@ if __name__ == "__main__":
         f"{arch}_multi-steps",
     ]
     modes = [
-        # f"{arch}_all",
-        # f"{arch}_mix",
-        # f"{arch}_random-mix",
-        # f"{arch}_single-step",
+        f"{arch}_all",
+        f"{arch}_mix",
+        f"{arch}_random-mix",
+        f"{arch}_single-step",
         # f"{arch}_fixed-single-step",
         # f"{arch}_reversed-single-step",
     ]
