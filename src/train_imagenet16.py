@@ -16,8 +16,8 @@ from torch.utils.tensorboard import SummaryWriter
 current_dir = pathlib.Path(os.path.abspath(__file__)).parent
 sys.path.append(str(current_dir) + "/../")
 
-from src.images.lowpass import GaussianBlurAll, RandomGaussianBlurAll
-from src.dataset.imagenet16 import load_data
+from src.image_process.lowpass_filter import GaussianBlurAll, RandomGaussianBlurAll
+from src.dataset.imagenet16 import load_imagenet16
 from src.utils.model import load_model, save_model
 from src.utils.adjust import (
     adjust_learning_rate,
@@ -68,7 +68,7 @@ parser.add_argument("--exp_name", "-n", type=str, default="", help="Experiment n
 parser.add_argument(
     "--log_dir",
     type=str,
-    default=str(current_dir) + "/../logs",
+    default=str(current_dir) + "/../train-logs/imagenet16",
     help="Path to log directory to store trained models, tensorboard, stdout, and stderr.",
 )
 parser.add_argument(
@@ -182,7 +182,7 @@ def main():
         torch.cuda.manual_seed(args.seed)
 
     # data settings
-    trainloader, testloader = load_data(batch_size=args.batch_size)
+    trainloader, testloader = load_imagenet16(batch_size=args.batch_size)
 
     # Model, Criterion, Optimizer
     model = load_model(args.arch)  # remember the number of final outputs is 16.
