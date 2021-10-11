@@ -1,3 +1,12 @@
+# /*
+# BSD 3-Clause License
+# 
+# Copyright (c) 2017, 
+# All rights reserved.
+# 
+# https://github.com/pytorch/examples/blob/master/LICENSE
+# */
+    
 import argparse
 import os
 import pathlib
