@@ -1,3 +1,10 @@
+# BSD 3-Clause License
+# 
+# Copyright (c) 2017, Pytorch contributors
+# All rights reserved.
+# 
+# https://github.com/pytorch/examples/blob/master/LICENSE
+
 import sys
 
 sys.path.append("../")
